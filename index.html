@@ -6,23 +6,33 @@
   <title>Календарь исследований</title>
   <style>
     :root {
-      --bg: #f8fafc;
+      --bg: #f1f5f9;
       --surface: #ffffff;
-      --border: #e2e8f0;
-      --text: #0f172a;
-      --muted: #64748b;
-      --weekend-bg: #f8fafc;
+      --surface-subtle: #f8fafc;
+      --border: #cbd5e1;
+      --border-focus: #64748b;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --weekend-bg: #e2e8f0;
       --weekend-text: #94a3b8;
+      
       --accent: #2563eb;
-      --danger: #dc2626;
+      --accent-hover: #1d4ed8;
+      --danger: #ef4444;
+      --success: #10b981;
+      --warning: #f59e0b;
 
-      /* Цвета отделений */
-      --dep-ko1: #0284c7;    /* КО1 — Лазурный */
-      --dep-ko2: #0d9488;    /* КО2 — Бирюзовый */
-      --dep-ko3: #16a34a;    /* КО3 — Зеленый */
-      --dep-kxo2: #d97706;   /* КХО2 — Янтарный */
-      --dep-opu: #7c3aed;    /* ОПУ — Сиреневый */
-      --dep-other: #475569;  /* Другие — Графит */
+      /* Чёткая, контрастная и различимая палитра отделений */
+      --dep-ko1-bg: #bae6fd;    --dep-ko1-border: #0284c7;  --dep-ko1-text: #0369a1;  --dep-ko1-dot: #0284c7; /* Лазурный */
+      --dep-ko2-bg: #bbf7d0;    --dep-ko2-border: #16a34a;  --dep-ko2-text: #15803d;  --dep-ko2-dot: #16a34a; /* Изумрудный */
+      --dep-ko3-bg: #fef08a;    --dep-ko3-border: #ca8a04;  --dep-ko3-text: #854d0e;  --dep-ko3-dot: #eab308; /* Золотисто-желтый */
+      --dep-kxo2-bg: #fed7aa;   --dep-kxo2-border: #ea580c;  --dep-kxo2-text: #9a3412;  --dep-kxo2-dot: #f97316; /* Насыщенный оранжевый */
+      --dep-opu-bg: #e9d5ff;    --dep-opu-border: #9333ea;  --dep-opu-text: #6b21a8;  --dep-opu-dot: #a855f7; /* Фиолетовый */
+      --dep-other-bg: #fecdd3;  --dep-other-border: #e11d48;  --dep-other-text: #9f1239;  --dep-other-dot: #f43f5e; /* Кораллово-розовый */
+
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 8px -1px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.12);
     }
 
     * {
@@ -34,43 +44,106 @@
 
     body {
       background-color: var(--bg);
-      color: var(--text);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* ШАПКА */
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 16px 24px;
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
     }
 
     .brand h1 {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 700;
       letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .help-link {
-      font-size: 0.825rem;
-      color: var(--accent);
-      background: none;
-      border: none;
-      padding: 0;
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* КНОПКА ИНСТРУКЦИИ */
+    .help-btn {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 7px 12px;
+      border-radius: 8px;
       cursor: pointer;
-      text-decoration: underline;
-      margin-top: 4px;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      transition: all 0.15s;
     }
 
-    .help-link:hover {
-      color: #1d4ed8;
+    .help-btn:hover {
+      background: var(--surface-subtle);
+      color: var(--accent);
+      border-color: var(--border-focus);
+    }
+
+    /* СТАТУС СИНХРОНИЗАЦИИ */
+    .sync-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.775rem;
+      font-weight: 500;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+
+    .sync-status:hover {
+      border-color: var(--border-focus);
+    }
+
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--warning);
+      flex-shrink: 0;
+    }
+
+    .sync-status.connected .sync-dot {
+      background: var(--success);
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+    }
+
+    .sync-status.warning .sync-dot {
+      background: var(--warning);
+      box-shadow: 0 0 6px rgba(245, 158, 11, 0.5);
     }
 
     /* МЕНЮ ШЕСТЕРЕНКИ */
@@ -78,33 +151,36 @@
       position: relative;
     }
 
-    .gear-btn {
-      width: 38px;
-      height: 38px;
+    .icon-btn {
+      width: 36px;
+      height: 36px;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--surface);
-      font-size: 1.15rem;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: background 0.15s;
+      color: var(--text-muted);
+      transition: all 0.15s;
+      flex-shrink: 0;
     }
 
-    .gear-btn:hover {
-      background: #f1f5f9;
+    .icon-btn:hover {
+      background: var(--surface-subtle);
+      color: var(--text-main);
+      border-color: var(--border-focus);
     }
 
     .dropdown-menu {
       display: none;
       position: absolute;
       right: 0;
-      top: 46px;
+      top: 44px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 10px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+      box-shadow: var(--shadow-lg);
       width: 210px;
       padding: 6px;
       z-index: 50;
@@ -116,7 +192,7 @@
     }
 
     .dropdown-item {
-      padding: 10px 12px;
+      padding: 9px 12px;
       font-size: 0.85rem;
       border: none;
       background: none;
@@ -124,25 +200,30 @@
       border-radius: 6px;
       cursor: pointer;
       width: 100%;
-      color: var(--text);
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 8px;
+      font-weight: 500;
     }
 
     .dropdown-item:hover {
-      background: #f1f5f9;
+      background: var(--surface-subtle);
     }
 
     .dropdown-item.danger {
       color: var(--danger);
     }
 
+    .dropdown-item.danger:hover {
+      background: #fef2f2;
+    }
+
     /* ПАНЕЛЬ УПРАВЛЕНИЯ */
     .controls {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
+      padding: 12px 20px;
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
@@ -153,13 +234,13 @@
     .month-nav {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .month-nav h2 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
-      min-width: 160px;
+      min-width: 150px;
       text-align: center;
     }
 
@@ -168,15 +249,17 @@
       flex-wrap: wrap;
       gap: 8px;
       align-items: center;
+      flex: 1;
+      justify-content: flex-end;
     }
 
     input, select, button {
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       padding: 8px 12px;
-      border-radius: 6px;
+      border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--surface);
-      color: var(--text);
+      color: var(--text-main);
       outline: none;
     }
 
@@ -184,30 +267,99 @@
       border-color: var(--accent);
     }
 
-    button {
-      cursor: pointer;
-      font-weight: 500;
-      transition: background 0.15s;
-    }
-
     button.primary {
       background: var(--accent);
-      color: #fff;
+      color: #ffffff;
       border: none;
+      font-weight: 500;
     }
 
     button.primary:hover {
-      background: #1d4ed8;
+      background: var(--accent-hover);
+    }
+
+    button.secondary {
+      background: var(--surface);
+      color: var(--text-main);
+      border: 1px solid var(--border);
     }
 
     button.secondary:hover {
-      background: #f1f5f9;
+      background: var(--surface-subtle);
+      border-color: var(--border-focus);
+    }
+
+    /* КАСТОМНЫЙ ВЫБОР ОТДЕЛЕНИЯ С ЦВЕТНЫМИ ТОЧКАМИ */
+    .dept-select-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .dept-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .dept-trigger-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dept-options {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      z-index: 120;
+      max-height: 220px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+
+    .dept-options.active {
+      display: block;
+    }
+
+    .dept-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background 0.12s;
+    }
+
+    .dept-option:hover {
+      background: var(--surface-subtle);
+    }
+
+    .dept-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
     }
 
     /* СЕТКА КАЛЕНДАРЯ */
     main {
       flex: 1;
-      padding: 16px 24px;
+      padding: 16px 20px;
       max-width: 1400px;
       width: 100%;
       margin: 0 auto;
@@ -221,41 +373,46 @@
 
     .day-name {
       text-align: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--muted);
-      padding: 8px 0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 4px 0;
+      text-transform: uppercase;
     }
 
     .day-name.weekend-header {
       color: var(--weekend-text);
-      font-weight: 500;
+      opacity: 0.85;
     }
 
+    /* ЯЧЕЙКА КАЛЕНДАРЯ */
     .calendar-cell {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      min-height: 95px;
+      border-radius: 10px;
+      min-height: 96px;
       padding: 8px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       cursor: pointer;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s ease;
+      overflow: hidden;
     }
 
     .calendar-cell:hover:not(.weekend):not(.empty) {
-      border-color: var(--accent);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
     }
 
     .calendar-cell.weekend {
       background: var(--weekend-bg);
       cursor: not-allowed;
-      opacity: 0.45;
-      border-style: dashed;
+      border-color: transparent;
+      box-shadow: none;
+      opacity: 0.6;
     }
 
     .calendar-cell.weekend .day-num {
@@ -265,6 +422,7 @@
     .calendar-cell.empty {
       background: transparent;
       border: none;
+      box-shadow: none;
       cursor: default;
     }
 
@@ -272,11 +430,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
     }
 
     .day-num {
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
+      color: var(--text-main);
     }
 
     .today .day-num {
@@ -288,32 +448,67 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
-    }
-
-    /* БЕЙДЖ БРОНИ */
-    .slot-badge {
-      border-radius: 4px;
-      padding: 4px 6px;
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-align: center;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      margin-top: 4px;
-    }
-
-    .slot-info-desktop {
-      display: none;
       font-size: 0.7rem;
-      color: #fff;
+    }
+
+    /* ЗАНЯТЫЕ ДНИ С ЦВЕТНОЙ ЗАЛИВКОЙ */
+    .calendar-cell.booked {
+      border-width: 1px;
+    }
+
+    .cell-booking-content {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .booked-dept {
+      font-size: 0.825rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .booked-study {
+      font-size: 0.7rem;
+      font-weight: 600;
+      line-height: 1.2;
       opacity: 0.95;
-      font-weight: 400;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
+    }
+
+    /* ЦВЕТНОЙ БЕЙДЖ В ДЕТАЛЯХ */
+    .dept-badge-view {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border: 1px solid;
+    }
+
+    /* ПОДВАЛ */
+    footer {
+      padding: 14px 20px;
+      text-align: center;
+      font-size: 0.775rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    .author-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .author-link:hover {
+      color: var(--accent);
     }
 
     /* МОДАЛЬНЫЕ ОКНА */
@@ -321,7 +516,8 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.4);
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(2px);
       align-items: center;
       justify-content: center;
       padding: 16px;
@@ -330,11 +526,12 @@
 
     .modal {
       background: var(--surface);
-      border-radius: 12px;
+      border-radius: 14px;
       width: 100%;
-      max-width: 460px;
+      max-width: 450px;
       padding: 24px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
     }
 
     .modal h3 {
@@ -344,7 +541,7 @@
 
     .modal-subtitle {
       font-size: 0.85rem;
-      color: var(--muted);
+      color: var(--text-muted);
       margin-bottom: 16px;
     }
 
@@ -358,7 +555,7 @@
     .form-group label {
       font-size: 0.8rem;
       font-weight: 600;
-      color: var(--muted);
+      color: var(--text-muted);
     }
 
     .modal-footer {
@@ -369,14 +566,14 @@
     }
 
     .meta-box {
-      background: var(--bg);
+      background: var(--surface-subtle);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px;
+      border-radius: 8px;
+      padding: 12px;
       font-size: 0.8rem;
-      margin-top: 12px;
-      color: var(--muted);
-      line-height: 1.4;
+      margin-top: 14px;
+      color: var(--text-muted);
+      line-height: 1.45;
     }
 
     .help-list {
@@ -385,7 +582,6 @@
       gap: 12px;
       font-size: 0.875rem;
       line-height: 1.5;
-      color: var(--text);
       margin: 16px 0;
     }
 
@@ -395,38 +591,79 @@
       align-items: flex-start;
     }
 
-    .help-icon {
-      font-size: 1.1rem;
-      line-height: 1;
+    .help-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 2px;
     }
 
-    @media (min-width: 768px) {
-      .calendar-cell {
-        min-height: 105px;
+    @media (max-width: 680px) {
+      header {
+        padding: 10px 14px;
       }
-      .slot-info-desktop {
-        display: block;
+      .brand h1 {
+        font-size: 1.05rem;
       }
-    }
-
-    @media (max-width: 600px) {
-      header, .controls {
-        padding-left: 12px;
-        padding-right: 12px;
+      .help-text, .sync-text {
+        display: none;
+      }
+      .help-btn {
+        padding: 0;
+        width: 36px;
+        height: 36px;
+        justify-content: center;
+      }
+      .sync-status {
+        padding: 0;
+        width: 36px;
+        height: 36px;
+        justify-content: center;
+        border-radius: 8px;
+      }
+      .controls {
+        padding: 10px 14px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .month-nav {
+        justify-content: space-between;
+      }
+      .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .filter-group .dept-select-wrapper, .filter-group select, .filter-group input {
+        width: 100%;
       }
       main {
-        padding: 8px;
+        padding: 6px;
       }
       .calendar {
         gap: 4px;
       }
       .calendar-cell {
-        min-height: 65px;
+        min-height: 64px;
         padding: 4px;
+        border-radius: 6px;
       }
-      .slot-badge {
-        font-size: 0.65rem;
-        padding: 2px 4px;
+      .day-num {
+        font-size: 0.75rem;
+      }
+      .booked-dept {
+        font-size: 0.725rem;
+      }
+      .booked-study {
+        display: none;
       }
     }
   </style>
@@ -436,42 +673,87 @@
   <header>
     <div class="brand">
       <h1>Календарь исследований</h1>
-      <button type="button" class="help-link" id="btn-open-help">📖 Инструкция по использованию</button>
     </div>
 
-    <div class="menu-container">
-      <button id="btn-gear" class="gear-btn" title="Настройки">⚙️</button>
-      <div id="gear-menu" class="dropdown-menu">
-        <button class="dropdown-item" id="btn-db-config">☁️ База данных</button>
-        <button class="dropdown-item danger" id="btn-reset">🗑️ Сбросить всё</button>
+    <div class="header-right">
+      <button type="button" class="help-btn" id="btn-open-help" title="Инструкция">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <span class="help-text">Инструкция</span>
+      </button>
+
+      <div id="sync-status" class="sync-status warning" title="Статус базы (кликните для настройки)">
+        <span class="sync-dot"></span>
+        <span class="sync-text" id="sync-text">Подключите базу</span>
+      </div>
+
+      <div class="menu-container">
+        <button id="btn-gear" class="icon-btn" title="Настройки">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+        <div id="gear-menu" class="dropdown-menu">
+          <button class="dropdown-item" id="btn-db-config">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+            База данных
+          </button>
+          <button class="dropdown-item danger" id="btn-reset">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            Сбросить записи
+          </button>
+        </div>
       </div>
     </div>
   </header>
 
   <div class="controls">
     <div class="month-nav">
-      <button id="prev-month" class="secondary">&larr;</button>
+      <button id="prev-month" class="icon-btn" title="Предыдущий месяц">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
       <h2 id="current-month-label">Месяц Год</h2>
-      <button id="next-month" class="secondary">&rarr;</button>
+      <button id="next-month" class="icon-btn" title="Следующий месяц">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
     </div>
 
     <div class="filter-group">
-      <select id="filter-dep">
-        <option value="">Все отделения</option>
-        <option value="КО1">КО1</option>
-        <option value="КО2">КО2</option>
-        <option value="КО3">КО3</option>
-        <option value="КХО2">КХО2</option>
-        <option value="ОПУ">ОПУ</option>
-        <option value="Другие">Другие</option>
-      </select>
+      <!-- Кастомный фильтр отделений с точками -->
+      <div class="dept-select-wrapper" style="min-width: 170px;">
+        <div class="dept-trigger" id="filter-dept-trigger">
+          <div class="dept-trigger-content">
+            <span class="dept-dot" style="background: transparent;"></span>
+            <span id="filter-dept-label">Все отделения</span>
+          </div>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="dept-options" id="filter-dept-options">
+          <div class="dept-option" data-value="">
+            <span class="dept-dot" style="background: transparent; border: 1px dashed var(--text-muted);"></span>
+            <span>Все отделения</span>
+          </div>
+          <div class="dept-option" data-value="КО1"><span class="dept-dot" style="background: var(--dep-ko1-dot);"></span> КО1</div>
+          <div class="dept-option" data-value="КО2"><span class="dept-dot" style="background: var(--dep-ko2-dot);"></span> КО2</div>
+          <div class="dept-option" data-value="КО3"><span class="dept-dot" style="background: var(--dep-ko3-dot);"></span> КО3</div>
+          <div class="dept-option" data-value="КХО2"><span class="dept-dot" style="background: var(--dep-kxo2-dot);"></span> КХО2</div>
+          <div class="dept-option" data-value="ОПУ"><span class="dept-dot" style="background: var(--dep-opu-dot);"></span> ОПУ</div>
+          <div class="dept-option" data-value="Другие"><span class="dept-dot" style="background: var(--dep-other-dot);"></span> Другие</div>
+        </div>
+      </div>
 
-      <select id="filter-study">
-        <option value="">Все исследования</option>
-        <option value="МРТ сердца">МРТ сердца</option>
-        <option value="КТ - КАГ">КТ - КАГ</option>
-        <option value="КТ по протоколу ТИАК">КТ по протоколу ТИАК</option>
-      </select>
+<!-- Кастомный фильтр исследований в едином стиле -->
+      <div class="dept-select-wrapper" style="min-width: 190px;">
+        <div class="dept-trigger" id="filter-study-trigger">
+          <div class="dept-trigger-content">
+            <span id="filter-study-label">Все исследования</span>
+          </div>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="dept-options" id="filter-study-options">
+          <div class="dept-option" data-value="">Все исследования</div>
+          <div class="dept-option" data-value="МРТ сердца">МРТ сердца</div>
+          <div class="dept-option" data-value="КТ - КАГ">КТ - КАГ</div>
+          <div class="dept-option" data-value="КТ по протоколу ТИАК">КТ по протоколу ТИАК</div>
+        </div>
+      </div>
 
       <input type="text" id="search-patient" placeholder="Поиск по пациенту..." />
     </div>
@@ -481,32 +763,36 @@
     <div class="calendar" id="calendar-grid"></div>
   </main>
 
+  <footer>
+    Сделал <a href="https://t.me/maxim_koles" target="_blank" rel="noopener noreferrer" class="author-link">@maxim_koles</a> с ИИ
+  </footer>
+
   <!-- МОДАЛЬНОЕ ОКНО: ИНСТРУКЦИЯ -->
   <div class="modal-backdrop" id="help-modal">
     <div class="modal">
       <h3>Инструкция врача</h3>
-      <p class="modal-subtitle">Как работает график и бронирование слотов</p>
+      <p class="modal-subtitle">Как устроен график и бронирование слотов</p>
       
       <div class="help-list">
         <div class="help-item">
-          <div class="help-icon">1️⃣</div>
-          <div><strong>Лимит:</strong> В каждый рабочий день можно сделать только <strong>1 исследование</strong> на все отделения вместе. Сб и Вс недоступны.</div>
+          <span class="help-num">1</span>
+          <div><strong>Лимит исследований:</strong> В каждый рабочий день выполняется только <strong>1 исследование</strong> на все отделения суммарно. Суббота и воскресенье недоступны.</div>
         </div>
         <div class="help-item">
-          <div class="help-icon">2️⃣</div>
+          <span class="help-num">2</span>
           <div><strong>Бронирование:</strong> Нажмите на любой пустой рабочий день, выберите отделение, исследование и введите фамилию пациента.</div>
         </div>
         <div class="help-item">
-          <div class="help-icon">3️⃣</div>
-          <div><strong>Детали:</strong> Если день окрашен — слот занят. Нажмите на него, чтобы увидеть пациента и точное время создания записи.</div>
+          <span class="help-num">3</span>
+          <div><strong>Просмотр деталей:</strong> Если день окрашен — слот занят. Нажмите на него, чтобы увидеть пациента, точное время и цвет отделения.</div>
         </div>
         <div class="help-item">
-          <div class="help-icon">4️⃣</div>
-          <div><strong>Поиск:</strong> Пользуйтесь фильтрами сверху для быстрого поиска пациента или слотов своего отделения.</div>
+          <span class="help-num">4</span>
+          <div><strong>Поиск:</strong> Пользуйтесь фильтрами сверху для быстрой сортировки по отделению или поиска фамилии.</div>
         </div>
         <div class="help-item">
-          <div class="help-icon">5️⃣</div>
-          <div><strong>Приоритет:</strong> Система фиксирует время отправки вплоть до секунд — кто записался раньше, за тем и закрепляется слот.</div>
+          <span class="help-num">5</span>
+          <div><strong>Приоритет:</strong> Система фиксирует время сохранения вплоть до секунд — преимущество у того, кто отправил запись раньше.</div>
         </div>
       </div>
 
@@ -526,15 +812,24 @@
 
         <div class="form-group">
           <label>Отделение</label>
-          <select id="form-dept" required>
-            <option value="">Выберите отделение</option>
-            <option value="КО1">КО1</option>
-            <option value="КО2">КО2</option>
-            <option value="КО3">КО3</option>
-            <option value="КХО2">КХО2</option>
-            <option value="ОПУ">ОПУ</option>
-            <option value="Другие">Другие</option>
-          </select>
+          <input type="hidden" id="form-dept-value" required />
+          <div class="dept-select-wrapper">
+            <div class="dept-trigger" id="form-dept-trigger">
+              <div class="dept-trigger-content">
+                <span class="dept-dot" id="form-dept-dot" style="background: transparent;"></span>
+                <span id="form-dept-label">Выберите отделение</span>
+              </div>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="dept-options" id="form-dept-options">
+              <div class="dept-option" data-value="КО1"><span class="dept-dot" style="background: var(--dep-ko1-dot);"></span> КО1</div>
+              <div class="dept-option" data-value="КО2"><span class="dept-dot" style="background: var(--dep-ko2-dot);"></span> КО2</div>
+              <div class="dept-option" data-value="КО3"><span class="dept-dot" style="background: var(--dep-ko3-dot);"></span> КО3</div>
+              <div class="dept-option" data-value="КХО2"><span class="dept-dot" style="background: var(--dep-kxo2-dot);"></span> КХО2</div>
+              <div class="dept-option" data-value="ОПУ"><span class="dept-dot" style="background: var(--dep-opu-dot);"></span> ОПУ</div>
+              <div class="dept-option" data-value="Другие"><span class="dept-dot" style="background: var(--dep-other-dot);"></span> Другие</div>
+            </div>
+          </div>
         </div>
 
         <div class="form-group">
@@ -565,23 +860,27 @@
     </div>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО: ПРОСМОТР ДЕТАЛЕЙ -->
+  <!-- МОДАЛЬНОЕ ОКНО: ДЕТАЛИ ЗАПИСИ С ЦВЕТНЫМ БЕЙДЖЕМ -->
   <div class="modal-backdrop" id="view-modal">
     <div class="modal">
       <h3 id="view-title">Детали записи</h3>
       <p class="modal-subtitle" id="view-date"></p>
 
-      <div style="margin: 12px 0;">
-        <div style="font-size: 0.9rem; margin-bottom: 6px;"><strong>Отделение:</strong> <span id="view-dept"></span></div>
-        <div style="font-size: 0.9rem; margin-bottom: 6px;"><strong>Исследование:</strong> <span id="view-study"></span></div>
-        <div style="font-size: 0.9rem; margin-bottom: 6px;"><strong>Пациент:</strong> <span id="view-patient"></span></div>
-        <div style="font-size: 0.85rem; color: var(--muted); margin-bottom: 6px;" id="view-notes-row">
+      <div style="margin: 14px 0; display: flex; flex-direction: column; gap: 8px;">
+        <div style="font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+          <strong>Отделение:</strong> 
+          <span id="view-dept-badge" class="dept-badge-view"></span>
+        </div>
+        <div style="font-size: 0.9rem;"><strong>Исследование:</strong> <span id="view-study"></span></div>
+        <div style="font-size: 0.9rem;"><strong>Пациент:</strong> <span id="view-patient"></span></div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);" id="view-notes-row">
           <strong>Примечание:</strong> <span id="view-notes"></span>
         </div>
       </div>
 
       <div class="meta-box">
-        ⏱ <strong>Зафиксировано в системе:</strong><br />
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <strong>Зафиксировано в системе:</strong><br />
         <span id="view-timestamp"></span>
       </div>
 
@@ -595,40 +894,59 @@
   <!-- МОДАЛЬНОЕ ОКНО: НАСТРОЙКА FIREBASE -->
   <div class="modal-backdrop" id="db-modal">
     <div class="modal">
-      <h3>Подключение общей базы данных</h3>
-      <p class="modal-subtitle">Вставьте URL Realtime Database из Firebase, чтобы записи синхронизировались между всеми компьютерами.</p>
+      <h3>Подключение базы данных</h3>
+      <p class="modal-subtitle">для синхронизации всех отделений</p>
       
       <div class="form-group">
         <label>Database URL</label>
-        <input type="url" id="fb-url" placeholder="https://your-project-default-rtdb.firebaseio.com" />
+        <input type="url" id="fb-url" placeholder="https://vash-proekt-default-rtdb.europe-west1.firebasedatabase.app" />
       </div>
 
-      <p style="font-size: 0.75rem; color: var(--muted); line-height: 1.4;">
-        Если оставить поле пустым, записи сохраняются только на этом устройстве (локальный режим).
+      <p style="font-size: 0.775rem; color: var(--text-muted); line-height: 1.45;">
+        Если оставить поле пустым, график сохраняется только локально на этом устройстве.
       </p>
 
       <div class="modal-footer">
         <button type="button" class="secondary" id="btn-close-db">Отмена</button>
-        <button type="button" class="primary" id="btn-save-db">Сохранить</button>
+        <button type="submit" class="primary" id="btn-save-db">Сохранить</button>
       </div>
     </div>
   </div>
 
   <script>
-    const DEPT_COLORS = {
-      "КО1": "var(--dep-ko1)",
-      "КО2": "var(--dep-ko2)",
-      "КО3": "var(--dep-ko3)",
-      "КХО2": "var(--dep-kxo2)",
-      "ОПУ": "var(--dep-opu)",
-      "Другие": "var(--dep-other)"
+    // Конфигурация темы отделений с яркими цветами
+    const DEPT_THEMES = {
+      "КО1":   { bg: "var(--dep-ko1-bg)",   border: "var(--dep-ko1-border)",   text: "var(--dep-ko1-text)", dot: "var(--dep-ko1-dot)" },
+      "КО2":   { bg: "var(--dep-ko2-bg)",   border: "var(--dep-ko2-border)",   text: "var(--dep-ko2-text)", dot: "var(--dep-ko2-dot)" },
+      "КО3":   { bg: "var(--dep-ko3-bg)",   border: "var(--dep-ko3-border)",   text: "var(--dep-ko3-text)", dot: "var(--dep-ko3-dot)" },
+      "КХО2":  { bg: "var(--dep-kxo2-bg)",  border: "var(--dep-kxo2-border)",  text: "var(--dep-kxo2-text)", dot: "var(--dep-kxo2-dot)" },
+      "ОПУ":   { bg: "var(--dep-opu-bg)",   border: "var(--dep-opu-border)",   text: "var(--dep-opu-text)", dot: "var(--dep-opu-dot)" },
+      "Другие":{ bg: "var(--dep-other-bg)", border: "var(--dep-other-border)", text: "var(--dep-other-text)", dot: "var(--dep-other-dot)" }
     };
 
     let currentDate = new Date();
     let bookings = {};
-    // Если хотите вшить ссылку на базу прямо в код, укажите её здесь вместо пустых кавычек:
+    let selectedFilterDept = "";
+	let selectedFilterStudy = "";
+    
     const HARDCODED_FIREBASE_URL = ""; 
     let firebaseDbUrl = localStorage.getItem("cardioscan_fb_url") || HARDCODED_FIREBASE_URL;
+
+    // Статус базы
+    const syncStatus = document.getElementById("sync-status");
+    const syncText = document.getElementById("sync-text");
+
+    function updateSyncIndicator(isConnected) {
+      if (isConnected) {
+        syncStatus.className = "sync-status connected";
+        syncText.textContent = "Синхронизировано";
+      } else {
+        syncStatus.className = "sync-status warning";
+        syncText.textContent = "Подключите базу";
+      }
+    }
+
+    syncStatus.addEventListener("click", () => openDbModal());
 
     // Меню-шестеренка
     const btnGear = document.getElementById("btn-gear");
@@ -639,11 +957,11 @@
       gearMenu.classList.toggle("active");
     });
 
-    document.addEventListener("click", (e) => {
-      if (!gearMenu.contains(e.target) && e.target !== btnGear) {
-        gearMenu.classList.remove("active");
-      }
-    });
+document.addEventListener("click", () => {
+  filterDeptOptions.classList.remove("active");
+  filterStudyOptions.classList.remove("active");
+  formDeptOptions.classList.remove("active");
+});
 
     // Инструкция
     const helpModal = document.getElementById("help-modal");
@@ -654,19 +972,101 @@
       helpModal.style.display = "none";
     });
 
-    // Загрузка и синхронизация данных
+    // 1. НАСТРОЙКА ВЫПАДАЮЩИХ СПИСКОВ С ТОЧКАМИ
+    // В фильтре
+    const filterDeptTrigger = document.getElementById("filter-dept-trigger");
+    const filterDeptOptions = document.getElementById("filter-dept-options");
+    const filterDeptLabel = document.getElementById("filter-dept-label");
+    const filterDeptDot = filterDeptTrigger.querySelector(".dept-dot");
+
+    filterDeptTrigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      filterDeptOptions.classList.toggle("active");
+    });
+
+    filterDeptOptions.querySelectorAll(".dept-option").forEach(opt => {
+      opt.addEventListener("click", () => {
+        const val = opt.getAttribute("data-value");
+        selectedFilterDept = val;
+        filterDeptLabel.textContent = val || "Все отделения";
+        if (val && DEPT_THEMES[val]) {
+          filterDeptDot.style.background = DEPT_THEMES[val].dot;
+          filterDeptDot.style.border = "none";
+        } else {
+          filterDeptDot.style.background = "transparent";
+          filterDeptDot.style.border = "1px dashed var(--text-muted)";
+        }
+        filterDeptOptions.classList.remove("active");
+        renderCalendar();
+      });
+    });
+// Кастомный фильтр исследований
+const filterStudyTrigger = document.getElementById("filter-study-trigger");
+const filterStudyOptions = document.getElementById("filter-study-options");
+const filterStudyLabel = document.getElementById("filter-study-label");
+
+filterStudyTrigger.addEventListener("click", (e) => {
+  e.stopPropagation();
+  filterDeptOptions.classList.remove("active"); // закрываем соседний, если открыт
+  filterStudyOptions.classList.toggle("active");
+});
+
+filterStudyOptions.querySelectorAll(".dept-option").forEach(opt => {
+  opt.addEventListener("click", () => {
+    const val = opt.getAttribute("data-value");
+    selectedFilterStudy = val;
+    filterStudyLabel.textContent = val || "Все исследования";
+    filterStudyOptions.classList.remove("active");
+    renderCalendar();
+  });
+});
+    // В форме записи
+    const formDeptTrigger = document.getElementById("form-dept-trigger");
+    const formDeptOptions = document.getElementById("form-dept-options");
+    const formDeptLabel = document.getElementById("form-dept-label");
+    const formDeptDot = document.getElementById("form-dept-dot");
+    const formDeptValue = document.getElementById("form-dept-value");
+
+    formDeptTrigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      formDeptOptions.classList.toggle("active");
+    });
+
+    formDeptOptions.querySelectorAll(".dept-option").forEach(opt => {
+      opt.addEventListener("click", () => {
+        const val = opt.getAttribute("data-value");
+        formDeptValue.value = val;
+        formDeptLabel.textContent = val;
+        formDeptDot.style.background = DEPT_THEMES[val].dot;
+        formDeptOptions.classList.remove("active");
+      });
+    });
+
+    document.addEventListener("click", () => {
+      filterDeptOptions.classList.remove("active");
+      formDeptOptions.classList.remove("active");
+    });
+
+    // Загрузка данных
     async function loadData() {
       if (firebaseDbUrl) {
         try {
           const res = await fetch(`${firebaseDbUrl}/bookings.json`);
-          const data = await res.json();
-          bookings = data || {};
+          if (res.ok) {
+            const data = await res.json();
+            bookings = data || {};
+            updateSyncIndicator(true);
+          } else {
+            throw new Error("HTTP error");
+          }
         } catch (err) {
-          console.warn("Сбой загрузки Firebase, использую локальные данные", err);
+          console.warn("Сбой Firebase", err);
           bookings = JSON.parse(localStorage.getItem("cardioscan_bookings") || "{}");
+          updateSyncIndicator(false);
         }
       } else {
         bookings = JSON.parse(localStorage.getItem("cardioscan_bookings") || "{}");
+        updateSyncIndicator(false);
       }
       renderCalendar();
     }
@@ -682,8 +1082,10 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(bookingData)
           });
+          updateSyncIndicator(true);
         } catch (err) {
           console.error("Ошибка сохранения в Firebase", err);
+          updateSyncIndicator(false);
         }
       }
       renderCalendar();
@@ -698,8 +1100,10 @@
           await fetch(`${firebaseDbUrl}/bookings/${dateStr}.json`, {
             method: "DELETE"
           });
+          updateSyncIndicator(true);
         } catch (err) {
-          console.error("Ошибка удаления из Firebase", err);
+          console.error("Ошибка удаления", err);
+          updateSyncIndicator(false);
         }
       }
       renderCalendar();
@@ -707,7 +1111,7 @@
 
     document.getElementById("btn-reset").addEventListener("click", () => {
       gearMenu.classList.remove("active");
-      if (confirm("Вы уверены, что хотите стереть все бронирования?")) {
+      if (confirm("Вы уверены, что хотите полностью стереть все бронирования?")) {
         bookings = {};
         localStorage.removeItem("cardioscan_bookings");
         if (firebaseDbUrl) {
@@ -720,7 +1124,6 @@
     // Отрисовка календаря
     const calendarGrid = document.getElementById("calendar-grid");
     const currentMonthLabel = document.getElementById("current-month-label");
-    const filterDept = document.getElementById("filter-dep");
     const filterStudy = document.getElementById("filter-study");
     const searchPatient = document.getElementById("search-patient");
 
@@ -784,22 +1187,28 @@
 
         let matchesFilter = true;
         if (record) {
-          if (filterDept.value && record.department !== filterDept.value) matchesFilter = false;
-          if (filterStudy.value && record.studyType !== filterStudy.value) matchesFilter = false;
+          if (selectedFilterDept && record.department !== selectedFilterDept) matchesFilter = false;
+          if (selectedFilterStudy && record.studyType !== selectedFilterStudy) matchesFilter = false;
           if (searchPatient.value.trim() && !record.patientName.toLowerCase().includes(searchPatient.value.trim().toLowerCase())) {
             matchesFilter = false;
           }
         }
 
+        // Применяем яркий контрастный стиль к ячейке
         if (record && matchesFilter) {
-          const badge = document.createElement("div");
-          badge.className = "slot-badge";
-          badge.style.background = DEPT_COLORS[record.department] || "#334155";
-          badge.innerHTML = `
-            <div>${record.department}</div>
-            <div class="slot-info-desktop">${record.studyType}</div>
+          cell.classList.add("booked");
+          const theme = DEPT_THEMES[record.department] || DEPT_THEMES["Другие"];
+          
+          cell.style.backgroundColor = theme.bg;
+          cell.style.borderColor = theme.border;
+
+          const content = document.createElement("div");
+          content.className = "cell-booking-content";
+          content.innerHTML = `
+            <div class="booked-dept" style="color: ${theme.text};">${record.department}</div>
+            <div class="booked-study" style="color: ${theme.text};">${record.studyType}</div>
           `;
-          cell.appendChild(badge);
+          cell.appendChild(content);
         }
 
         if (!isWeekend) {
@@ -826,8 +1235,7 @@
       renderCalendar();
     });
 
-    filterDept.addEventListener("change", renderCalendar);
-    filterStudy.addEventListener("change", renderCalendar);
+    
     searchPatient.addEventListener("input", renderCalendar);
 
     // Модальное окно бронирования
@@ -841,6 +1249,12 @@
       const parts = dateStr.split("-");
       modalDateLabel.textContent = `Дата: ${parts[2]}.${parts[1]}.${parts[0]}`;
       bookingForm.reset();
+      
+      // Сброс кастомного селекта
+      formDeptValue.value = "";
+      formDeptLabel.textContent = "Выберите отделение";
+      formDeptDot.style.background = "transparent";
+      
       bookingModal.style.display = "flex";
     }
 
@@ -852,8 +1266,13 @@
       e.preventDefault();
       const dateStr = formDate.value;
 
+      if (!formDeptValue.value) {
+        alert("Пожалуйста, выберите отделение!");
+        return;
+      }
+
       if (bookings[dateStr]) {
-        alert("Этот слот уже был занят другим отделением!");
+        alert("Этот слот уже занят другим отделением!");
         bookingModal.style.display = "none";
         return;
       }
@@ -866,7 +1285,7 @@
 
       const newBooking = {
         date: dateStr,
-        department: document.getElementById("form-dept").value,
+        department: formDeptValue.value,
         studyType: document.getElementById("form-study").value,
         patientName: document.getElementById("form-patient").value.trim(),
         notes: document.getElementById("form-notes").value.trim(),
@@ -877,15 +1296,23 @@
       bookingModal.style.display = "none";
     });
 
-    // Модальное окно деталей
+    // Модальное окно деталей записи с отображением цвета отделения
     const viewModal = document.getElementById("view-modal");
+    const viewDeptBadge = document.getElementById("view-dept-badge");
     let activeDate = null;
 
     function openViewModal(dateStr, record) {
       activeDate = dateStr;
       const parts = dateStr.split("-");
       document.getElementById("view-date").textContent = `Дата: ${parts[2]}.${parts[1]}.${parts[0]}`;
-      document.getElementById("view-dept").textContent = record.department;
+      
+      // Настройка цветного бейджа отделения
+      const theme = DEPT_THEMES[record.department] || DEPT_THEMES["Другие"];
+      viewDeptBadge.textContent = record.department;
+      viewDeptBadge.style.backgroundColor = theme.bg;
+      viewDeptBadge.style.color = theme.text;
+      viewDeptBadge.style.borderColor = theme.border;
+
       document.getElementById("view-study").textContent = record.studyType;
       document.getElementById("view-patient").textContent = record.patientName;
       
@@ -912,14 +1339,18 @@
       }
     });
 
-    // Настройка Firebase вручную через меню (если не вшита в код)
+    // Настройка Firebase
     const dbModal = document.getElementById("db-modal");
     const fbUrlInput = document.getElementById("fb-url");
 
-    document.getElementById("btn-db-config").addEventListener("click", () => {
-      gearMenu.classList.remove("active");
+    function openDbModal() {
       fbUrlInput.value = firebaseDbUrl;
       dbModal.style.display = "flex";
+    }
+
+    document.getElementById("btn-db-config").addEventListener("click", () => {
+      gearMenu.classList.remove("active");
+      openDbModal();
     });
 
     document.getElementById("btn-close-db").addEventListener("click", () => {
@@ -941,7 +1372,7 @@
       }
     }, 12000);
 
-    // Первичный старт
+    // Старт
     loadData();
   </script>
 </body>
