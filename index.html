@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Календарь исследований</title>
+  <title>Календарь исследований (МРТ / КТ-КАГ / ТИАК)</title>
   <style>
     :root {
       --bg: #f1f5f9;
       --surface: #ffffff;
       --surface-subtle: #f8fafc;
-      --border: #cbd5e1;
-      --border-focus: #64748b;
       --text-main: #0f172a;
       --text-muted: #64748b;
       --weekend-bg: #e2e8f0;
@@ -18,24 +16,27 @@
       
       --accent: #2563eb;
       --accent-hover: #1d4ed8;
+      --accent-light: #eff6ff;
       --danger: #ef4444;
       --danger-bg: #fef2f2;
       --danger-border: #fecaca;
       --danger-text: #991b1b;
-      --success: #10b981;
+      --success: #16a34a;
       --warning: #f59e0b;
 
-      /* Чёткая, контрастная и различимая палитра отделений */
-      --dep-ko1-bg: #bae6fd;    --dep-ko1-border: #0284c7;  --dep-ko1-text: #0369a1;  --dep-ko1-dot: #0284c7; /* Лазурный */
-      --dep-ko2-bg: #bbf7d0;    --dep-ko2-border: #16a34a;  --dep-ko2-text: #15803d;  --dep-ko2-dot: #16a34a; /* Изумрудный */
-      --dep-ko3-bg: #fef08a;    --dep-ko3-border: #ca8a04;  --dep-ko3-text: #854d0e;  --dep-ko3-dot: #eab308; /* Золотисто-желтый */
-      --dep-kxo2-bg: #fed7aa;   --dep-kxo2-border: #ea580c;  --dep-kxo2-text: #9a3412;  --dep-kxo2-dot: #f97316; /* Насыщенный оранжевый */
-      --dep-opu-bg: #e9d5ff;    --dep-opu-border: #9333ea;  --dep-opu-text: #6b21a8;  --dep-opu-dot: #a855f7; /* Фиолетовый */
-      --dep-other-bg: #fecdd3;  --dep-other-border: #e11d48;  --dep-other-text: #9f1239;  --dep-other-dot: #f43f5e; /* Кораллово-розовый */
+      /* Пастельная палитра для отделений */
+      --dep-ko1-bg: #e0f2fe;    --dep-ko1-text: #0369a1;  --dep-ko1-dot: #0284c7;
+      --dep-ko2-bg: #dcfce7;    --dep-ko2-text: #15803d;  --dep-ko2-dot: #16a34a;
+      --dep-ko3-bg: #fef9c3;    --dep-ko3-text: #854d0e;  --dep-ko3-dot: #ca8a04;
+      --dep-kxo2-bg: #ffedd5;   --dep-kxo2-text: #9a3412; --dep-kxo2-dot: #ea580c;
+      --dep-opu-bg: #f3e8ff;    --dep-opu-text: #6b21a8;  --dep-opu-dot: #9333ea;
+      --dep-other-bg: #ffe4e6;  --dep-other-text: #9f1239; --dep-other-dot: #e11d48;
 
-      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
-      --shadow-md: 0 4px 8px -1px rgba(15, 23, 42, 0.08);
-      --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.12);
+      /* Мягкие объемные тени для эффекта парения */
+      --shadow-float-sm: 0 2px 6px -1px rgba(15, 23, 42, 0.05), 0 1px 4px -1px rgba(15, 23, 42, 0.03);
+      --shadow-float-md: 0 6px 16px -2px rgba(15, 23, 42, 0.07), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+      --shadow-float-lg: 0 14px 28px -4px rgba(15, 23, 42, 0.1), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
+      --shadow-modal: 0 20px 35px -5px rgba(15, 23, 42, 0.18), 0 8px 16px -4px rgba(15, 23, 42, 0.08);
     }
 
     * {
@@ -54,81 +55,75 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ШАПКА */
+    /* ШАПКА БЕЗ БОРДЮРОВ */
     header {
       background: var(--surface);
-      border-bottom: 1px solid var(--border);
       padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
+      box-shadow: var(--shadow-float-sm);
+      z-index: 10;
     }
 
     .brand h1 {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 700;
       letter-spacing: -0.02em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .header-right {
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-shrink: 0;
     }
 
-    /* КНОПКА ИНСТРУКЦИИ */
+    /* КНОПКИ В ШАПКЕ */
     .help-btn {
       font-size: 0.8rem;
       color: var(--text-muted);
       background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 7px 12px;
-      border-radius: 8px;
+      border: none;
+      box-shadow: var(--shadow-float-sm);
+      padding: 0 12px;
+      height: 36px;
+      border-radius: 9px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       font-weight: 500;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
     }
 
     .help-btn:hover {
-      background: var(--surface-subtle);
-      color: var(--accent);
-      border-color: var(--border-focus);
+      box-shadow: var(--shadow-float-md);
+      transform: translateY(-1px);
     }
 
-    /* СТАТУС СИНХРОНИЗАЦИИ */
     .sync-status {
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      padding: 7px 12px;
-      border-radius: 8px;
+      padding: 0 12px;
+      height: 36px;
+      border-radius: 9px;
       font-size: 0.775rem;
-      font-weight: 500;
-      background: var(--surface-subtle);
-      border: 1px solid var(--border);
+      font-weight: 600;
+      background: var(--surface);
+      border: none;
+      box-shadow: var(--shadow-float-sm);
       cursor: pointer;
-      user-select: none;
+      line-height: 1;
       transition: all 0.15s ease;
     }
 
     .sync-status:hover {
-      border-color: var(--border-focus);
+      box-shadow: var(--shadow-float-md);
+      transform: translateY(-1px);
     }
 
     .sync-dot {
@@ -141,38 +136,28 @@
 
     .sync-status.connected .sync-dot {
       background: var(--success);
-      box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
-    }
-
-    .sync-status.warning .sync-dot {
-      background: var(--warning);
-      box-shadow: 0 0 6px rgba(245, 158, 11, 0.5);
-    }
-
-    /* МЕНЮ ШЕСТЕРЕНКИ */
-    .menu-container {
-      position: relative;
+      box-shadow: 0 0 6px rgba(22, 163, 74, 0.6);
     }
 
     .icon-btn {
       width: 36px;
       height: 36px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
+      border-radius: 9px;
+      border: none;
       background: var(--surface);
-      display: flex;
+      box-shadow: var(--shadow-float-sm);
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       color: var(--text-muted);
-      transition: all 0.15s;
-      flex-shrink: 0;
+      transition: all 0.15s ease;
     }
 
     .icon-btn:hover {
-      background: var(--surface-subtle);
+      box-shadow: var(--shadow-float-md);
+      transform: translateY(-1px);
       color: var(--text-main);
-      border-color: var(--border-focus);
     }
 
     .dropdown-menu {
@@ -181,33 +166,33 @@
       right: 0;
       top: 44px;
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      box-shadow: var(--shadow-lg);
-      width: 220px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: var(--shadow-modal);
+      width: 210px;
       padding: 6px;
-      z-index: 50;
+      z-index: 60;
     }
 
     .dropdown-menu.active {
       display: flex;
       flex-direction: column;
+      gap: 2px;
     }
 
     .dropdown-item {
       padding: 9px 12px;
-      font-size: 0.85rem;
+      font-size: 0.825rem;
       border: none;
       background: none;
       text-align: left;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
-      width: 100%;
-      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 8px;
       font-weight: 500;
+      color: var(--text-main);
     }
 
     .dropdown-item:hover {
@@ -219,19 +204,26 @@
     }
 
     .dropdown-item.danger:hover {
-      background: #fef2f2;
+      background: var(--danger-bg);
     }
 
-    /* ПАНЕЛЬ УПРАВЛЕНИЯ (DESKTOP) */
+    /* ПАНЕЛЬ УПРАВЛЕНИЯ */
     .controls {
       background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 24px;
+      padding: 12px 20px;
       display: flex;
-      flex-wrap: nowrap;
-      gap: 16px;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: var(--shadow-float-sm);
+      margin-bottom: 6px;
+    }
+
+    .controls-row-top {
+      display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .month-nav {
@@ -239,157 +231,162 @@
       align-items: center;
       gap: 6px;
       background: var(--surface-subtle);
-      padding: 4px;
+      padding: 4px 6px;
       border-radius: 10px;
-      border: 1px solid var(--border);
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
     }
 
     .month-nav h2 {
       font-size: 0.95rem;
-      font-weight: 600;
-      min-width: 150px;
+      font-weight: 700;
+      min-width: 145px;
       text-align: center;
-      user-select: none;
     }
 
-    .filter-group {
+    .controls-row-filters {
       display: flex;
-      flex-wrap: nowrap;
-      gap: 10px;
       align-items: center;
-      justify-content: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
-    .filter-group .dept-select-wrapper {
-      width: 200px;
+    .filter-section {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    #search-patient {
-      width: 220px;
+    .filter-label {
+      font-size: 0.725rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
-    input, select, button {
-      font-size: 0.85rem;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-main);
-      outline: none;
+    .filter-pills {
+      display: inline-flex;
+      gap: 4px;
+      background: var(--surface-subtle);
+      padding: 3px;
+      border-radius: 9px;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
     }
 
-    input:focus, select:focus {
-      border-color: var(--accent);
-    }
-
-    button.primary {
-      background: var(--accent);
-      color: #ffffff;
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px;
+      font-size: 0.775rem;
+      font-weight: 600;
       border: none;
-      font-weight: 500;
+      background: transparent;
+      border-radius: 7px;
       cursor: pointer;
-    }
-
-    button.primary:hover {
-      background: var(--accent-hover);
-    }
-
-    button.secondary {
-      background: var(--surface);
-      color: var(--text-main);
-      border: 1px solid var(--border);
-      cursor: pointer;
-    }
-
-    button.secondary:hover {
-      background: var(--surface-subtle);
-      border-color: var(--border-focus);
-    }
-
-    /* КАСТОМНЫЙ ВЫБОР ОТДЕЛЕНИЯ С ЦВЕТНЫМИ ТОЧКАМИ */
-    .dept-select-wrapper {
-      position: relative;
-      width: 100%;
-    }
-
-    .dept-trigger {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: border-color 0.15s;
-    }
-
-    .dept-trigger:hover {
-      border-color: var(--border-focus);
-    }
-
-    .dept-trigger-content {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-    }
-
-    .dept-trigger-content span:last-child {
+      color: var(--text-muted);
+      transition: all 0.15s ease;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
-    .dept-options {
-      display: none;
-      position: absolute;
-      top: calc(100% + 4px);
-      left: 0;
-      right: 0;
+    .pill-btn:hover {
+      color: var(--text-main);
+    }
+
+    .pill-btn.active {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      box-shadow: var(--shadow-lg);
-      z-index: 120;
-      max-height: 220px;
-      overflow-y: auto;
-      padding: 4px;
-    }
-
-    .dept-options.active {
-      display: block;
-    }
-
-    .dept-option {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: background 0.12s;
-    }
-
-    .dept-option:hover {
-      background: var(--surface-subtle);
+      color: var(--accent);
+      box-shadow: var(--shadow-float-sm);
     }
 
     .dept-dot {
-      width: 10px;
-      height: 10px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
+      display: inline-block;
+    }
+
+    .search-switch-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-left: auto;
+    }
+
+    /* ПЕРЕКЛЮЧАТЕЛЬ "ТОЛЬКО СВОБОДНЫЕ" */
+    .switch-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    .switch-input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .switch-track {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+      background-color: #cbd5e1;
+      border-radius: 20px;
+      transition: background-color 0.2s;
       flex-shrink: 0;
+    }
+
+    .switch-track::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+
+    .switch-input:checked + .switch-track {
+      background-color: var(--success);
+    }
+
+    .switch-input:checked + .switch-track::after {
+      transform: translateX(16px);
+    }
+
+    #search-patient {
+      font-size: 0.825rem;
+      padding: 7px 12px;
+      border-radius: 9px;
+      border: none;
+      background: var(--surface-subtle);
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+      color: var(--text-main);
+      outline: none;
+      width: 170px;
+      transition: box-shadow 0.15s ease;
+    }
+
+    #search-patient:focus {
+      box-shadow: 0 0 0 2px var(--accent-light), inset 0 1px 2px rgba(15, 23, 42, 0.05);
     }
 
     /* СЕТКА КАЛЕНДАРЯ */
     main {
       flex: 1;
       padding: 16px 20px;
-      max-width: 1400px;
+      max-width: 1440px;
       width: 100%;
       margin: 0 auto;
     }
@@ -397,240 +394,130 @@
     .calendar {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
+      gap: 10px;
     }
 
     .day-name {
       text-align: center;
-      font-size: 0.75rem;
+      font-size: 0.775rem;
       font-weight: 700;
       color: var(--text-muted);
-      padding: 4px 0;
+      padding: 6px 0;
       text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
     .day-name.weekend-header {
       color: var(--weekend-text);
-      opacity: 0.85;
     }
 
-    /* ЯЧЕЙКА КАЛЕНДАРЯ */
+    /* ЭФФЕКТ ПАРЕНИЯ ЯЧЕЕК (БЕЗ БОРДЮРОВ) */
     .calendar-cell {
       background: var(--surface);
       border: none;
-      border-radius: 10px;
-      min-height: 96px;
-      padding: 8px;
+      border-radius: 12px;
+      min-height: 108px;
+      padding: 9px 8px 8px 8px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      gap: 5px;
+      box-shadow: var(--shadow-float-sm);
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.15s ease;
-      overflow: hidden;
     }
 
     .calendar-cell:hover:not(.weekend):not(.empty) {
       transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-float-md);
     }
 
     .calendar-cell.weekend {
       background: var(--weekend-bg);
-      cursor: not-allowed;
       box-shadow: none;
-      opacity: 0.6;
-    }
-
-    .calendar-cell.weekend .day-num {
-      color: var(--weekend-text);
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .calendar-cell.empty {
       background: transparent;
-      border: none;
       box-shadow: none;
       cursor: default;
     }
 
-    .cell-top {
+    .cell-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 100%;
+      margin-bottom: 2px;
+      line-height: 1;
     }
 
     .day-num {
-      font-size: 0.85rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      color: var(--text-main);
+      color: #5a5d67;
     }
 
     .today .day-num {
-      background: var(--accent);
-      color: #fff;
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
+      color: var(--success);
+      font-weight: 800;
     }
 
-    /* ЗАНЯТЫЕ ДНИ */
-    .calendar-cell.booked {
-      border: none !important;
-    }
-
-    .cell-booking-content {
-      margin-top: auto;
+    .slots-container {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 4px;
+      flex: 1;
     }
 
-    .booked-dept {
-      font-size: 0.825rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      line-height: 1.2;
-    }
-
-    .booked-study {
-      font-size: 0.7rem;
-      font-weight: 600;
-      line-height: 1.2;
-      opacity: 0.95;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .dept-badge-view {
-      display: inline-flex;
+    /* СЛОТ */
+    .slot-item {
+      display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 0.85rem;
+      justify-content: space-between;
+      padding: 4px 7px;
+      border-radius: 7px;
+      font-size: 0.75rem;
+      user-select: none;
+      line-height: 1.25;
+      border: none !important;
+      transition: all 0.12s ease;
     }
 
-    /* ПОДВАЛ */
-    footer {
-      padding: 14px 20px;
-      text-align: center;
-      font-size: 0.775rem;
+    .slot-item.free {
+      background: var(--surface-subtle);
       color: var(--text-muted);
-      margin-top: auto;
+      opacity: 0.85;
     }
 
-    .author-link {
-      color: var(--text-muted);
-      text-decoration: none;
+    .slot-item.free:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .slot-item.free .slot-title {
       font-weight: 500;
     }
 
-    .author-link:hover {
-      color: var(--accent);
-    }
-
-    /* МОДАЛЬНЫЕ ОКНА */
-    .modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.45);
-      backdrop-filter: blur(2px);
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      z-index: 100;
-    }
-
-    .modal {
-      background: var(--surface);
-      border-radius: 14px;
-      width: 100%;
-      max-width: 450px;
-      padding: 24px;
-      box-shadow: var(--shadow-lg);
-      border: 1px solid var(--border);
-    }
-
-    .modal h3 {
-      font-size: 1.15rem;
-      margin-bottom: 4px;
-    }
-
-    .modal-subtitle {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
-
-    .form-group {
-      margin-bottom: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .form-group label {
-      font-size: 0.8rem;
+    .slot-item.booked {
       font-weight: 600;
-      color: var(--text-muted);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     }
 
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 20px;
+    .slot-item.booked:hover {
+      transform: scale(1.01);
     }
 
-    .meta-box {
-      background: var(--surface-subtle);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 0.8rem;
-      margin-top: 14px;
-      color: var(--text-muted);
-      line-height: 1.45;
+    .slot-item.booked .slot-study-name {
+      font-weight: 700;
     }
 
-    .help-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      font-size: 0.875rem;
-      line-height: 1.5;
-      margin: 16px 0;
-    }
-
-    .help-item {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-    }
-
-    .help-num {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--surface-subtle);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--accent);
-      flex-shrink: 0;
-      margin-top: 2px;
+    .slot-item.booked .slot-dept-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      opacity: 0.85;
     }
 
     /* ПЛАШКА ПРЕДУПРЕЖДЕНИЯ ОБ ОТСУТСТВИИ БАЗЫ */
@@ -638,16 +525,16 @@
       display: none;
       background: var(--danger-bg);
       border: 1px solid var(--danger-border);
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 10px 12px;
-      margin-top: 8px;
+      margin-top: 6px;
       margin-bottom: 4px;
       color: var(--danger-text);
       font-size: 0.8rem;
-      line-height: 1.4;
+      line-height: 1.45;
       align-items: flex-start;
       gap: 10px;
-      animation: bannerSlideIn 0.2s ease;
+      animation: bannerFade 0.2s ease;
     }
 
     .db-warning-banner.visible {
@@ -671,7 +558,7 @@
       color: var(--accent);
       text-decoration: underline;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.775rem;
       align-self: flex-start;
       background: none;
@@ -683,52 +570,230 @@
       color: var(--accent-hover);
     }
 
-    @keyframes bannerSlideIn {
-      from { opacity: 0; transform: translateY(-4px); }
+    @keyframes bannerFade {
+      from { opacity: 0; transform: translateY(-3px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* МОБИЛЬНАЯ ВЕРСИЯ */
-    @media (max-width: 680px) {
+    /* МОДАЛЬНЫЕ ОКНА БЕЗ БОРДЮРОВ */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 100;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      padding: 24px;
+      box-shadow: var(--shadow-modal);
+      border: none;
+    }
+
+    .modal h3 {
+      font-size: 1.15rem;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .modal-subtitle {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.775rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    input, select, button {
+      font-size: 0.85rem;
+      padding: 8px 12px;
+      border-radius: 9px;
+      border: none;
+      background: var(--surface-subtle);
+      color: var(--text-main);
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+    }
+
+    input:focus, select:focus {
+      box-shadow: 0 0 0 2px var(--accent-light), inset 0 1px 2px rgba(15, 23, 42, 0.05);
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #ffffff;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+      transition: all 0.15s ease;
+    }
+
+    button.primary:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
+    }
+
+    button.secondary {
+      background: var(--surface-subtle);
+      color: var(--text-main);
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-float-sm);
+    }
+
+    button.secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .meta-box {
+      background: var(--surface-subtle);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 0.8rem;
+      margin-top: 14px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .dept-select-wrapper {
+      position: relative;
+    }
+
+    .dept-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 9px;
+      border: none;
+      background: var(--surface-subtle);
+      cursor: pointer;
+      font-size: 0.85rem;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+    }
+
+    .dept-options {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border: none;
+      border-radius: 12px;
+      box-shadow: var(--shadow-modal);
+      z-index: 70;
+      padding: 6px;
+    }
+
+    .dept-options.active {
+      display: block;
+    }
+
+    .dept-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.825rem;
+      font-weight: 500;
+    }
+
+    .dept-option:hover {
+      background: var(--surface-subtle);
+    }
+
+    /* АДАПТИВНОСТЬ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА */
+    @media (max-width: 860px) {
       header {
         padding: 10px 14px;
       }
       .brand h1 {
-        font-size: 1.05rem;
+        font-size: 1rem;
       }
       .help-text, .sync-text {
         display: none;
       }
-      .help-btn {
-        padding: 0;
+      .help-btn, .sync-status {
         width: 36px;
-        height: 36px;
-        justify-content: center;
-      }
-      .sync-status {
         padding: 0;
-        width: 36px;
-        height: 36px;
-        justify-content: center;
-        border-radius: 8px;
       }
       .controls {
         padding: 10px 14px;
-        flex-direction: column;
-        align-items: stretch;
+        gap: 10px;
       }
       .month-nav {
+        width: 100%;
         justify-content: space-between;
-        background: transparent;
-        padding: 0;
-        border: none;
       }
-      .filter-group {
+      .controls-row-filters {
         flex-direction: column;
         align-items: stretch;
+        gap: 8px;
       }
-      .filter-group .dept-select-wrapper, .filter-group select, .filter-group input {
-        width: 100% !important;
+      .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+      }
+      .filter-pills {
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 3px;
+      }
+      .pill-btn {
+        flex: 1 0 auto;
+        justify-content: center;
+        padding: 6px 8px;
+        font-size: 0.725rem;
+      }
+      .search-switch-group {
+        margin-left: 0;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        align-items: center;
+        padding-top: 4px;
+      }
+      .switch-wrap {
+        font-size: 0.75rem;
+        gap: 6px;
+      }
+      #search-patient {
+        width: 100%;
+        padding: 6px 10px;
       }
       main {
         padding: 6px;
@@ -737,18 +802,22 @@
         gap: 4px;
       }
       .calendar-cell {
-        min-height: 64px;
-        padding: 4px;
-        border-radius: 6px;
+        min-height: 74px;
+        padding: 5px 3px;
+        border-radius: 8px;
       }
       .day-num {
-        font-size: 0.75rem;
+        font-size: 1rem;
       }
-      .booked-dept {
-        font-size: 0.725rem;
+      .slot-item {
+        padding: 2px 3px;
+        font-size: 0.65rem;
+        border-radius: 5px;
+        justify-content: center;
+        text-align: center;
       }
-      .booked-study {
-        display: none;
+      .slot-dept-label {
+        display: none !important;
       }
     }
   </style>
@@ -757,92 +826,80 @@
 
   <header>
     <div class="brand">
-      <h1>Календарь исследований</h1>
+      <h1>График исследований</h1>
     </div>
 
     <div class="header-right">
       <button type="button" class="help-btn" id="btn-open-help" title="Инструкция">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
         <span class="help-text">Инструкция</span>
       </button>
 
-      <div id="sync-status" class="sync-status warning" title="Статус базы (кликните для настройки)">
+      <div id="sync-status" class="sync-status warning" title="Статус базы данных">
         <span class="sync-dot"></span>
-        <span class="sync-text" id="sync-text">Подключите базу</span>
+        <span class="sync-text" id="sync-text">Локально</span>
       </div>
 
-      <div class="menu-container">
+      <div style="position: relative;">
         <button id="btn-gear" class="icon-btn" title="Настройки">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
         </button>
         <div id="gear-menu" class="dropdown-menu">
-          <button class="dropdown-item" id="btn-export-month">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-            Экспорт (скопировать)
-          </button>
-          <button class="dropdown-item" id="btn-db-config">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
-            База данных
-          </button>
-          <button class="dropdown-item danger" id="btn-reset">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-            Сбросить записи
-          </button>
+          <button class="dropdown-item" id="btn-export-month">Скопировать записи</button>
+          <button class="dropdown-item" id="btn-db-config">База данных (Firebase)</button>
+          <button class="dropdown-item danger" id="btn-reset">Стереть всё</button>
         </div>
       </div>
     </div>
   </header>
 
   <div class="controls">
-    <div class="month-nav">
-      <button id="prev-month" class="icon-btn" title="Предыдущий месяц">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-      </button>
-      <h2 id="current-month-label">Месяц Год</h2>
-      <button id="next-month" class="icon-btn" title="Следующий месяц">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-      </button>
+    <!-- Навигация по месяцу -->
+    <div class="controls-row-top">
+      <div class="month-nav">
+        <button id="prev-month" class="icon-btn">‹</button>
+        <h2 id="current-month-label">Месяц Год</h2>
+        <button id="next-month" class="icon-btn">›</button>
+      </div>
     </div>
 
-    <div class="filter-group">
-      <div class="dept-select-wrapper">
-        <div class="dept-trigger" id="filter-dept-trigger">
-          <div class="dept-trigger-content">
-            <span class="dept-dot" style="background: transparent;"></span>
-            <span id="filter-dept-label">Все отделения</span>
-          </div>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </div>
-        <div class="dept-options" id="filter-dept-options">
-          <div class="dept-option" data-value="">
-            <span class="dept-dot" style="background: transparent; border: 1px dashed var(--text-muted);"></span>
-            <span>Все отделения</span>
-          </div>
-          <div class="dept-option" data-value="КО1"><span class="dept-dot" style="background: var(--dep-ko1-dot);"></span> КО1</div>
-          <div class="dept-option" data-value="КО2"><span class="dept-dot" style="background: var(--dep-ko2-dot);"></span> КО2</div>
-          <div class="dept-option" data-value="КО3"><span class="dept-dot" style="background: var(--dep-ko3-dot);"></span> КО3</div>
-          <div class="dept-option" data-value="КХО1"><span class="dept-dot" style="background: var(--dep-kxo2-dot);"></span> КХО1</div>
-          <div class="dept-option" data-value="ОПУ"><span class="dept-dot" style="background: var(--dep-opu-dot);"></span> ОПУ</div>
-          <div class="dept-option" data-value="Другие"><span class="dept-dot" style="background: var(--dep-other-dot);"></span> Другие</div>
+    <!-- Строка фильтров -->
+    <div class="controls-row-filters">
+      <!-- Исследование -->
+      <div class="filter-section">
+        <span class="filter-label">ИССЛЕДОВАНИЕ:</span>
+        <div class="filter-pills" id="study-pills">
+          <button class="pill-btn active" data-study="">Все</button>
+          <button class="pill-btn" data-study="МРТ">МРТ</button>
+          <button class="pill-btn" data-study="КТ-КАГ">КТ-КАГ</button>
+          <button class="pill-btn" data-study="ТИАК">ТИАК</button>
         </div>
       </div>
 
-      <div class="dept-select-wrapper">
-        <div class="dept-trigger" id="filter-study-trigger">
-          <div class="dept-trigger-content">
-            <span id="filter-study-label">Все исследования</span>
-          </div>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </div>
-        <div class="dept-options" id="filter-study-options">
-          <div class="dept-option" data-value="">Все исследования</div>
-          <div class="dept-option" data-value="МРТ сердца">МРТ сердца</div>
-          <div class="dept-option" data-value="КТ - КАГ">КТ - КАГ</div>
-          <div class="dept-option" data-value="КТ по протоколу ТИАК">КТ по протоколу ТИАК</div>
+      <!-- Отделение -->
+      <div class="filter-section">
+        <span class="filter-label">ОТДЕЛЕНИЕ:</span>
+        <div class="filter-pills" id="dept-pills">
+          <button class="pill-btn active" data-dept="">Все</button>
+          <button class="pill-btn" data-dept="КО1"><span class="dept-dot" style="background: var(--dep-ko1-dot);"></span> КО1</button>
+          <button class="pill-btn" data-dept="КО2"><span class="dept-dot" style="background: var(--dep-ko2-dot);"></span> КО2</button>
+          <button class="pill-btn" data-dept="КО3"><span class="dept-dot" style="background: var(--dep-ko3-dot);"></span> КО3</button>
+          <button class="pill-btn" data-dept="КХО1"><span class="dept-dot" style="background: var(--dep-kxo2-dot);"></span> КХО1</button>
+          <button class="pill-btn" data-dept="ОПУ"><span class="dept-dot" style="background: var(--dep-opu-dot);"></span> ОПУ</button>
+          <button class="pill-btn" data-dept="Другие"><span class="dept-dot" style="background: var(--dep-other-dot);"></span> Другие</button>
         </div>
       </div>
 
-      <input type="text" id="search-patient" placeholder="Поиск по пациенту..." />
+      <!-- Группа переключателя и поиска -->
+      <div class="search-switch-group">
+        <label class="switch-wrap" title="Скрыть занятые слоты">
+          <input type="checkbox" id="filter-only-free" class="switch-input" />
+          <span class="switch-track"></span>
+          <span>ТОЛЬКО СВОБОДНЫЕ</span>
+        </label>
+
+        <input type="text" id="search-patient" placeholder="Поиск фамилии..." />
+      </div>
     </div>
   </div>
 
@@ -850,63 +907,30 @@
     <div class="calendar" id="calendar-grid"></div>
   </main>
 
-  <footer>
-    Сделал <a href="https://t.me/maxim_koles" target="_blank" rel="noopener noreferrer" class="author-link">@maxim_koles</a> с ИИ
-  </footer>
-
-  <!-- МОДАЛЬНОЕ ОКНО: ИНСТРУКЦИЯ -->
-  <div class="modal-backdrop" id="help-modal">
-    <div class="modal">
-      <h3>Инструкция врача</h3>
-      <p class="modal-subtitle">Как устроен график и бронирование слотов</p>
-      
-      <div class="help-list">
-        <div class="help-item">
-          <span class="help-num">1</span>
-          <div><strong>Лимит исследований:</strong> В каждый рабочий день выполняется только <strong>1 исследование</strong> на все отделения суммарно. Суббота и воскресенье недоступны.</div>
-        </div>
-        <div class="help-item">
-          <span class="help-num">2</span>
-          <div><strong>Бронирование:</strong> Нажмите на любой пустой рабочий день, выберите отделение, исследование и введите фамилию пациента.</div>
-        </div>
-        <div class="help-item">
-          <span class="help-num">3</span>
-          <div><strong>Просмотр деталей:</strong> Если день окрашен — слот занят. Нажмите на него, чтобы увидеть пациента, точное время и цвет отделения.</div>
-        </div>
-        <div class="help-item">
-          <span class="help-num">4</span>
-          <div><strong>Поиск:</strong> Пользуйтесь фильтрами сверху для быстрой сортировки по отделению или поиска фамилии.</div>
-        </div>
-        <div class="help-item">
-          <span class="help-num">5</span>
-          <div><strong>Приоритет:</strong> Система фиксирует время сохранения вплоть до секунд — преимущество у того, кто отправил запись раньше.</div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="primary" id="btn-close-help">Понятно</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- МОДАЛЬНОЕ ОКНО: ЗАПИСЬ -->
+  <!-- МОДАЛЬНОЕ ОКНО: ЗАПИСЬ НА ИССЛЕДОВАНИЕ -->
   <div class="modal-backdrop" id="booking-modal">
     <div class="modal">
       <h3>Запись на исследование</h3>
-      <p class="modal-subtitle" id="modal-date-label"></p>
+      <p class="modal-subtitle" id="booking-modal-subtitle">Выберите свободное исследование и укажите пациента</p>
+      
       <form id="booking-form">
         <input type="hidden" id="form-date" />
 
         <div class="form-group">
+          <label>Исследование</label>
+          <select id="form-study" required></select>
+        </div>
+
+        <div class="form-group">
           <label>Отделение</label>
-          <input type="hidden" id="form-dept-value" required />
+          <input type="hidden" id="form-dept-val" required />
           <div class="dept-select-wrapper">
             <div class="dept-trigger" id="form-dept-trigger">
-              <div class="dept-trigger-content">
+              <div style="display: flex; align-items: center; gap: 6px;">
                 <span class="dept-dot" id="form-dept-dot" style="background: transparent;"></span>
                 <span id="form-dept-label">Выберите отделение</span>
               </div>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              <span style="font-size: 0.65rem;">▼</span>
             </div>
             <div class="dept-options" id="form-dept-options">
               <div class="dept-option" data-value="КО1"><span class="dept-dot" style="background: var(--dep-ko1-dot);"></span> КО1</div>
@@ -920,28 +944,18 @@
         </div>
 
         <div class="form-group">
-          <label>Исследование</label>
-          <select id="form-study" required>
-            <option value="">Выберите исследование</option>
-            <option value="МРТ сердца">МРТ сердца</option>
-            <option value="КТ - КАГ">КТ - КАГ</option>
-            <option value="КТ по протоколу ТИАК">КТ по протоколу ТИАК</option>
-          </select>
+          <label>Пациент (Фамилия И.О.)</label>
+          <input type="text" id="form-patient" placeholder="Иванов И.И." required />
         </div>
 
         <div class="form-group">
-          <label>Фамилия и инициалы пациента</label>
-          <input type="text" id="form-patient" placeholder="Например: Иванов И.И." required />
-        </div>
-
-        <div class="form-group">
-          <label>Примечание / № истории (опционально)</label>
-          <input type="text" id="form-notes" placeholder="Дополнительно" />
+          <label>№ Истории / примечание</label>
+          <input type="text" id="form-notes" placeholder="Опционально" />
         </div>
 
         <!-- КРАСНАЯ ПЛАШКА ЗАЩИТЫ БЕЗ БАЗЫ ДАННЫХ -->
         <div class="db-warning-banner" id="booking-db-warning">
-          <svg class="db-warning-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="db-warning-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
             <line x1="12" y1="9" x2="12" y2="13"></line>
             <line x1="12" y1="17" x2="12.01" y2="17"></line>
@@ -963,377 +977,163 @@
   <!-- МОДАЛЬНОЕ ОКНО: ДЕТАЛИ ЗАПИСИ -->
   <div class="modal-backdrop" id="view-modal">
     <div class="modal">
-      <h3 id="view-title">Детали записи</h3>
-      <p class="modal-subtitle" id="view-date"></p>
+      <h3 id="view-study-title">Исследование</h3>
+      <p class="modal-subtitle" id="view-date-subtitle"></p>
 
-      <div style="margin: 14px 0; display: flex; flex-direction: column; gap: 8px;">
-        <div style="font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
-          <strong>Отделение:</strong> 
-          <span id="view-dept-badge" class="dept-badge-view"></span>
-        </div>
-        <div style="font-size: 0.9rem;"><strong>Исследование:</strong> <span id="view-study"></span></div>
-        <div style="font-size: 0.9rem;"><strong>Пациент:</strong> <span id="view-patient"></span></div>
-        <div style="font-size: 0.85rem; color: var(--text-muted);" id="view-notes-row">
-          <strong>Примечание:</strong> <span id="view-notes"></span>
-        </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; margin: 12px 0; font-size: 0.875rem;">
+        <div><strong>Отделение:</strong> <span id="view-dept-name" style="padding: 3px 8px; border-radius: 6px; font-weight: 700;"></span></div>
+        <div><strong>Пациент:</strong> <span id="view-patient-name" style="font-weight: 600;"></span></div>
+        <div id="view-notes-wrap"><strong>Примечание:</strong> <span id="view-notes-val"></span></div>
       </div>
 
-      <div class="meta-box">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-        <strong>Зафиксировано в системе:</strong><br />
-        <span id="view-timestamp"></span>
-      </div>
+      <div class="meta-box" id="view-meta-box"></div>
 
       <div class="modal-footer">
-        <button type="button" class="secondary" id="btn-delete-slot" style="color: var(--danger); margin-right: auto;">Удалить запись</button>
+        <button type="button" class="secondary" id="btn-delete-slot" style="color: var(--danger); margin-right: auto;">Освободить слот</button>
         <button type="button" class="primary" id="btn-close-view">Закрыть</button>
       </div>
     </div>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО: НАСТРОЙКА FIREBASE -->
+  <!-- МОДАЛЬНОЕ ОКНО: FIREBASE БАЗА -->
   <div class="modal-backdrop" id="db-modal">
     <div class="modal">
       <h3>Подключение базы данных</h3>
-      <p class="modal-subtitle">для синхронизации всех отделений</p>
+      <p class="modal-subtitle">для синхронизации расписания между всеми отделениями</p>
       
       <div class="form-group">
-        <label>Database URL</label>
-        <input type="url" id="fb-url" placeholder="https://vash-proekt-default-rtdb.europe-west1.firebasedatabase.app" />
+        <label>URL базы Realtime Database</label>
+        <input type="url" id="fb-url-input" placeholder="https://vash-proekt-default-rtdb.europe-west1.firebasedatabase.app" />
       </div>
 
-      <p style="font-size: 0.775rem; color: var(--text-muted); line-height: 1.45;">
+      <p style="font-size: 0.775rem; color: var(--text-muted); line-height: 1.45; margin-top: 6px;">
         Если оставить поле пустым, график сохраняется только локально на этом устройстве.
       </p>
 
       <div class="modal-footer">
         <button type="button" class="secondary" id="btn-close-db">Отмена</button>
-        <button type="submit" class="primary" id="btn-save-db">Сохранить</button>
+        <button type="button" class="primary" id="btn-save-db">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО: ИНСТРУКЦИЯ -->
+  <div class="modal-backdrop" id="help-modal">
+    <div class="modal">
+      <h3>Инструкция</h3>
+      <div style="font-size: 0.85rem; line-height: 1.5; color: var(--text-main); margin: 12px 0; display: flex; flex-direction: column; gap: 8px;">
+        <p>• Каждый рабочий день доступно по 1 слоту каждого вида: <strong>МРТ</strong>, <strong>КТ-КАГ</strong> и <strong>ТИАК</strong>.</p>
+        <p>• Нажмите на любой рабочий день — откроется окно бронирования, где из выпадающего списка можно выбрать свободное исследование.</p>
+        <p>• Занятый слот окрашен цветом отделения. Нажмите на него, чтобы посмотреть детали или освободить место.</p>
+        <p>• Переключатель <strong>«ТОЛЬКО СВОБОДНЫЕ»</strong> скрывает занятые записи, оставляя свободные слоты.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="primary" id="btn-close-help">Понятно</button>
       </div>
     </div>
   </div>
 
   <script>
+    const STUDY_TYPES = ["МРТ", "КТ-КАГ", "ТИАК"];
+
     const DEPT_THEMES = {
-      "КО1":   { bg: "var(--dep-ko1-bg)",   border: "var(--dep-ko1-border)",   text: "var(--dep-ko1-text)", dot: "var(--dep-ko1-dot)" },
-      "КО2":   { bg: "var(--dep-ko2-bg)",   border: "var(--dep-ko2-border)",   text: "var(--dep-ko2-text)", dot: "var(--dep-ko2-dot)" },
-      "КО3":   { bg: "var(--dep-ko3-bg)",   border: "var(--dep-ko3-border)",   text: "var(--dep-ko3-text)", dot: "var(--dep-ko3-dot)" },
-      "КХО1":  { bg: "var(--dep-kxo2-bg)",  border: "var(--dep-kxo2-border)",  text: "var(--dep-kxo2-text)", dot: "var(--dep-kxo2-dot)" },
-      "ОПУ":   { bg: "var(--dep-opu-bg)",   border: "var(--dep-opu-border)",   text: "var(--dep-opu-text)", dot: "var(--dep-opu-dot)" },
-      "Другие":{ bg: "var(--dep-other-bg)", border: "var(--dep-other-border)", text: "var(--dep-other-text)", dot: "var(--dep-other-dot)" }
+      "КО1":   { bg: "var(--dep-ko1-bg)",   text: "var(--dep-ko1-text)", dot: "var(--dep-ko1-dot)" },
+      "КО2":   { bg: "var(--dep-ko2-bg)",   text: "var(--dep-ko2-text)", dot: "var(--dep-ko2-dot)" },
+      "КО3":   { bg: "var(--dep-ko3-bg)",   text: "var(--dep-ko3-text)", dot: "var(--dep-ko3-dot)" },
+      "КХО1":  { bg: "var(--dep-kxo2-bg)",  text: "var(--dep-kxo2-text)", dot: "var(--dep-kxo2-dot)" },
+      "ОПУ":   { bg: "var(--dep-opu-bg)",   text: "var(--dep-opu-text)", dot: "var(--dep-opu-dot)" },
+      "Другие":{ bg: "var(--dep-other-bg)", text: "var(--dep-other-text)", dot: "var(--dep-other-dot)" }
     };
 
     let currentDate = new Date();
     let bookings = {};
     let selectedFilterDept = "";
     let selectedFilterStudy = "";
-    
-    const HARDCODED_FIREBASE_URL = ""; 
-    let firebaseDbUrl = (localStorage.getItem("cardioscan_fb_url") || HARDCODED_FIREBASE_URL).trim();
+    let filterOnlyFree = false;
 
-    // Скрытое определение IP
-    let cachedUserIp = "unknown";
-    async function fetchUserIp() {
-      try {
-        const res = await fetch("https://api.ipify.org?format=json");
-        if (res.ok) {
-          const data = await res.json();
-          cachedUserIp = data.ip || "unknown";
-        }
-      } catch (e) {}
-      return cachedUserIp;
-    }
-    fetchUserIp();
+    let firebaseDbUrl = (localStorage.getItem("cardioscan_fb_url") || "").trim();
 
-    // Скрытый аудит-логгер
-    async function logAction(action, dateStr, payload) {
-      const ip = await fetchUserIp();
-      const logEntry = {
-        action: action,
-        date: dateStr,
-        timestamp: new Date().toISOString(),
-        clientTime: new Date().toLocaleString("ru-RU"),
-        ip: ip,
-        payload: payload || null
-      };
-
-      try {
-        const localLogs = JSON.parse(localStorage.getItem("cardioscan_audit_logs") || "[]");
-        localLogs.push(logEntry);
-        if (localLogs.length > 500) localLogs.shift();
-        localStorage.setItem("cardioscan_audit_logs", JSON.stringify(localLogs));
-      } catch (e) {}
-
-      if (firebaseDbUrl) {
-        try {
-          await fetch(`${firebaseDbUrl}/audit_logs.json`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(logEntry)
-          });
-        } catch (err) {
-          console.warn("Audit sync error", err);
-        }
-      }
-    }
-
-    // Элементы статуса и предупреждающей плашки
     const syncStatus = document.getElementById("sync-status");
     const syncText = document.getElementById("sync-text");
     const bookingDbWarning = document.getElementById("booking-db-warning");
 
-    function updateSyncIndicator(isConnected) {
-      if (isConnected) {
+    function updateSyncIndicator(online) {
+      if (online) {
         syncStatus.className = "sync-status connected";
-        syncText.textContent = "Синхронизировано";
+        syncText.textContent = "Онлайн";
         if (bookingDbWarning) bookingDbWarning.classList.remove("visible");
       } else {
         syncStatus.className = "sync-status warning";
-        syncText.textContent = "Подключите базу";
+        syncText.textContent = firebaseDbUrl ? "Офлайн" : "Локально";
         if (bookingDbWarning) bookingDbWarning.classList.add("visible");
       }
     }
 
     syncStatus.addEventListener("click", () => openDbModal());
 
-    // Меню-шестеренка
-    const btnGear = document.getElementById("btn-gear");
-    const gearMenu = document.getElementById("gear-menu");
-
-    btnGear.addEventListener("click", (e) => {
-      e.stopPropagation();
-      gearMenu.classList.toggle("active");
-    });
-
-    // Экспорт
-    document.getElementById("btn-export-month").addEventListener("click", () => {
-      gearMenu.classList.remove("active");
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
-      const prefix = `${year}-${String(month + 1).padStart(2, '0')}`;
-
-      const monthBookings = Object.keys(bookings)
-        .filter(dateStr => dateStr.startsWith(prefix))
-        .sort()
-        .map(dateStr => bookings[dateStr]);
-
-      if (monthBookings.length === 0) {
-        alert(`За ${monthNames[month]} ${year} нет записей.`);
-        return;
-      }
-
-      let textOutput = `График исследований: ${monthNames[month]} ${year}\nВсего записей: ${monthBookings.length}\n` + "=".repeat(40) + "\n\n";
-
-      monthBookings.forEach((b, index) => {
-        const parts = b.date.split("-");
-        const formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
-        textOutput += `${index + 1}. Дата: ${formattedDate}\n`;
-        textOutput += `   Пациент: ${b.patientName}\n`;
-        textOutput += `   Отделение: ${b.department}\n`;
-        textOutput += `   Исследование: ${b.studyType}\n`;
-        if (b.notes) {
-          textOutput += `   Примечание: ${b.notes}\n`;
-        }
-        textOutput += "\n";
-      });
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(textOutput.trim())
-          .then(() => alert(`Список записей за ${monthNames[month]} скопирован в буфер обмена!`))
-          .catch(() => fallbackCopy(textOutput.trim()));
-      } else {
-        fallbackCopy(textOutput.trim());
-      }
-    });
-
-    function fallbackCopy(text) {
-      const textarea = document.createElement("textarea");
-      textarea.value = text;
-      textarea.style.position = "fixed";
-      textarea.style.top = "-9999px";
-      document.body.appendChild(textarea);
-      textarea.focus();
-      textarea.select();
-      try {
-        document.execCommand('copy');
-        alert("Список записей за выбранный месяц скопирован в буфер обмена!");
-      } catch (err) {
-        alert("Не удалось скопировать данные.");
-      }
-      document.body.removeChild(textarea);
+    function openDbModal() {
+      document.getElementById("fb-url-input").value = firebaseDbUrl;
+      document.getElementById("db-modal").style.display = "flex";
     }
 
-    // Инструкция
-    const helpModal = document.getElementById("help-modal");
-    document.getElementById("btn-open-help").addEventListener("click", () => {
-      helpModal.style.display = "flex";
-    });
-    document.getElementById("btn-close-help").addEventListener("click", () => {
-      helpModal.style.display = "none";
-    });
-
-    // Фильтры
-    const filterDeptTrigger = document.getElementById("filter-dept-trigger");
-    const filterDeptOptions = document.getElementById("filter-dept-options");
-    const filterDeptLabel = document.getElementById("filter-dept-label");
-    const filterDeptDot = filterDeptTrigger.querySelector(".dept-dot");
-
-    filterDeptTrigger.addEventListener("click", (e) => {
-      e.stopPropagation();
-      filterStudyOptions.classList.remove("active");
-      filterDeptOptions.classList.toggle("active");
-    });
-
-    filterDeptOptions.querySelectorAll(".dept-option").forEach(opt => {
-      opt.addEventListener("click", () => {
-        const val = opt.getAttribute("data-value");
-        selectedFilterDept = val;
-        filterDeptLabel.textContent = val || "Все отделения";
-        if (val && DEPT_THEMES[val]) {
-          filterDeptDot.style.background = DEPT_THEMES[val].dot;
-          filterDeptDot.style.border = "none";
-        } else {
-          filterDeptDot.style.background = "transparent";
-          filterDeptDot.style.border = "1px dashed var(--text-muted)";
-        }
-        filterDeptOptions.classList.remove("active");
-        renderCalendar();
-      });
-    });
-
-    const filterStudyTrigger = document.getElementById("filter-study-trigger");
-    const filterStudyOptions = document.getElementById("filter-study-options");
-    const filterStudyLabel = document.getElementById("filter-study-label");
-
-    filterStudyTrigger.addEventListener("click", (e) => {
-      e.stopPropagation();
-      filterDeptOptions.classList.remove("active");
-      filterStudyOptions.classList.toggle("active");
-    });
-
-    filterStudyOptions.querySelectorAll(".dept-option").forEach(opt => {
-      opt.addEventListener("click", () => {
-        const val = opt.getAttribute("data-value");
-        selectedFilterStudy = val;
-        filterStudyLabel.textContent = val || "Все исследования";
-        filterStudyOptions.classList.remove("active");
-        renderCalendar();
-      });
-    });
-
-    // В форме записи
-    const formDeptTrigger = document.getElementById("form-dept-trigger");
-    const formDeptOptions = document.getElementById("form-dept-options");
-    const formDeptLabel = document.getElementById("form-dept-label");
-    const formDeptDot = document.getElementById("form-dept-dot");
-    const formDeptValue = document.getElementById("form-dept-value");
-
-    formDeptTrigger.addEventListener("click", (e) => {
-      e.stopPropagation();
-      formDeptOptions.classList.toggle("active");
-    });
-
-    formDeptOptions.querySelectorAll(".dept-option").forEach(opt => {
-      opt.addEventListener("click", () => {
-        const val = opt.getAttribute("data-value");
-        formDeptValue.value = val;
-        formDeptLabel.textContent = val;
-        formDeptDot.style.background = DEPT_THEMES[val].dot;
-        formDeptOptions.classList.remove("active");
-      });
-    });
-
-    document.addEventListener("click", () => {
-      filterDeptOptions.classList.remove("active");
-      filterStudyOptions.classList.remove("active");
-      formDeptOptions.classList.remove("active");
-      gearMenu.classList.remove("active");
-    });
-
-    // Загрузка данных
     async function loadData() {
       if (firebaseDbUrl) {
         try {
-          const res = await fetch(`${firebaseDbUrl}/bookings.json`);
+          const res = await fetch(`${firebaseDbUrl}/slots_v2.json`);
           if (res.ok) {
-            const data = await res.json();
-            bookings = data || {};
+            bookings = (await res.json()) || {};
             updateSyncIndicator(true);
           } else {
-            throw new Error("HTTP error");
+            throw new Error();
           }
-        } catch (err) {
-          console.warn("Сбой Firebase", err);
-          bookings = JSON.parse(localStorage.getItem("cardioscan_bookings") || "{}");
+        } catch (e) {
+          bookings = JSON.parse(localStorage.getItem("cardioscan_slots_v2") || "{}");
           updateSyncIndicator(false);
         }
       } else {
-        bookings = JSON.parse(localStorage.getItem("cardioscan_bookings") || "{}");
+        bookings = JSON.parse(localStorage.getItem("cardioscan_slots_v2") || "{}");
         updateSyncIndicator(false);
       }
       renderCalendar();
     }
 
-    async function saveBooking(dateStr, bookingData) {
-      bookings[dateStr] = bookingData;
-      localStorage.setItem("cardioscan_bookings", JSON.stringify(bookings));
-
-      logAction("CREATE", dateStr, bookingData);
-
+    async function saveBooking(slotKey, data) {
+      bookings[slotKey] = data;
+      localStorage.setItem("cardioscan_slots_v2", JSON.stringify(bookings));
       if (firebaseDbUrl) {
         try {
-          await fetch(`${firebaseDbUrl}/bookings/${dateStr}.json`, {
+          await fetch(`${firebaseDbUrl}/slots_v2/${slotKey}.json`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(bookingData)
+            body: JSON.stringify(data)
           });
           updateSyncIndicator(true);
-        } catch (err) {
-          console.error("Ошибка сохранения в Firebase", err);
+        } catch (e) {
           updateSyncIndicator(false);
         }
       }
       renderCalendar();
     }
 
-    async function removeBooking(dateStr) {
-      const removedData = bookings[dateStr] || null;
-      delete bookings[dateStr];
-      localStorage.setItem("cardioscan_bookings", JSON.stringify(bookings));
-
-      logAction("DELETE", dateStr, removedData);
-
+    async function removeBooking(slotKey) {
+      delete bookings[slotKey];
+      localStorage.setItem("cardioscan_slots_v2", JSON.stringify(bookings));
       if (firebaseDbUrl) {
         try {
-          await fetch(`${firebaseDbUrl}/bookings/${dateStr}.json`, {
-            method: "DELETE"
-          });
+          await fetch(`${firebaseDbUrl}/slots_v2/${slotKey}.json`, { method: "DELETE" });
           updateSyncIndicator(true);
-        } catch (err) {
-          console.error("Ошибка удаления", err);
+        } catch (e) {
           updateSyncIndicator(false);
         }
       }
       renderCalendar();
     }
 
-    document.getElementById("btn-reset").addEventListener("click", () => {
-      gearMenu.classList.remove("active");
-      if (confirm("Вы уверены, что хотите полностью стереть все бронирования?")) {
-        logAction("RESET_ALL", "ALL", { count: Object.keys(bookings).length });
-        bookings = {};
-        localStorage.removeItem("cardioscan_bookings");
-        if (firebaseDbUrl) {
-          fetch(`${firebaseDbUrl}/bookings.json`, { method: "DELETE" });
-        }
-        renderCalendar();
-      }
-    });
-
-    // Отрисовка календаря
+    // Рендер календаря
     const calendarGrid = document.getElementById("calendar-grid");
     const currentMonthLabel = document.getElementById("current-month-label");
     const searchPatient = document.getElementById("search-patient");
+    const filterFreeToggle = document.getElementById("filter-only-free");
 
     const monthNames = [
       "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
@@ -1376,6 +1176,7 @@
 
       const today = new Date();
       const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const searchVal = searchPatient.value.trim().toLowerCase();
 
       for (let day = 1; day <= daysInMonth; day++) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
@@ -1386,44 +1187,64 @@
         cell.className = `calendar-cell ${isWeekend ? "weekend" : ""}`;
         if (dateStr === todayStr) cell.classList.add("today");
 
-        const cellTop = document.createElement("div");
-        cellTop.className = "cell-top";
-        cellTop.innerHTML = `<span class="day-num">${day}</span>`;
-        cell.appendChild(cellTop);
-
-        const record = bookings[dateStr];
-
-        let matchesFilter = true;
-        if (record) {
-          if (selectedFilterDept && record.department !== selectedFilterDept) matchesFilter = false;
-          if (selectedFilterStudy && record.studyType !== selectedFilterStudy) matchesFilter = false;
-          if (searchPatient.value.trim() && !record.patientName.toLowerCase().includes(searchPatient.value.trim().toLowerCase())) {
-            matchesFilter = false;
-          }
-        }
-
-        if (record && matchesFilter) {
-          cell.classList.add("booked");
-          const theme = DEPT_THEMES[record.department] || DEPT_THEMES["Другие"];
-          
-          cell.style.backgroundColor = theme.bg;
-
-          const content = document.createElement("div");
-          content.className = "cell-booking-content";
-          content.innerHTML = `
-            <div class="booked-dept" style="color: ${theme.text};">${record.department}</div>
-            <div class="booked-study" style="color: ${theme.text};">${record.studyType}</div>
-          `;
-          cell.appendChild(content);
-        }
+        const cellHeader = document.createElement("div");
+        cellHeader.className = "cell-header";
+        cellHeader.innerHTML = `<span class="day-num">${day}</span>`;
+        cell.appendChild(cellHeader);
 
         if (!isWeekend) {
-          cell.addEventListener("click", () => {
-            if (bookings[dateStr]) {
-              openViewModal(dateStr, bookings[dateStr]);
-            } else {
-              openBookingModal(dateStr);
+          const slotsWrapper = document.createElement("div");
+          slotsWrapper.className = "slots-container";
+
+          STUDY_TYPES.forEach(study => {
+            const slotKey = `${dateStr}_${study}`;
+            const record = bookings[slotKey];
+
+            if (selectedFilterStudy && selectedFilterStudy !== study) {
+              return;
             }
+
+            if (!record) {
+              // СВОБОДНЫЙ СЛОТ
+              if (selectedFilterDept || searchVal) return;
+
+              const slotEl = document.createElement("div");
+              slotEl.className = "slot-item free";
+              slotEl.innerHTML = `<span class="slot-title">${study}</span>`;
+              slotsWrapper.appendChild(slotEl);
+
+            } else {
+              // ЗАНЯТЫЙ СЛОТ
+              if (filterOnlyFree) return;
+
+              let matches = true;
+              if (selectedFilterDept && record.department !== selectedFilterDept) matches = false;
+              if (searchVal && !record.patientName.toLowerCase().includes(searchVal)) matches = false;
+              if (!matches) return;
+
+              const theme = DEPT_THEMES[record.department] || DEPT_THEMES["Другие"];
+              const slotEl = document.createElement("div");
+              slotEl.className = "slot-item booked";
+              slotEl.style.backgroundColor = theme.bg;
+              slotEl.style.color = theme.text;
+
+              slotEl.innerHTML = `
+                <span class="slot-study-name">${study}</span>
+                <span class="slot-dept-label">${record.department}</span>
+              `;
+
+              slotEl.addEventListener("click", (e) => {
+                e.stopPropagation();
+                openViewModal(slotKey, dateStr, study, record);
+              });
+              slotsWrapper.appendChild(slotEl);
+            }
+          });
+
+          cell.appendChild(slotsWrapper);
+
+          cell.addEventListener("click", () => {
+            openBookingModalForDay(dateStr);
           });
         }
 
@@ -1431,6 +1252,33 @@
       }
     }
 
+    // Переключатель "Только свободные"
+    filterFreeToggle.addEventListener("change", (e) => {
+      filterOnlyFree = e.target.checked;
+      renderCalendar();
+    });
+
+    // Фильтр по исследованиям (Pills)
+    document.querySelectorAll("#study-pills .pill-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#study-pills .pill-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedFilterStudy = btn.getAttribute("data-study");
+        renderCalendar();
+      });
+    });
+
+    // Фильтр по отделениям (Pills)
+    document.querySelectorAll("#dept-pills .pill-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#dept-pills .pill-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedFilterDept = btn.getAttribute("data-dept");
+        renderCalendar();
+      });
+    });
+
+    // Навигация по месяцам
     document.getElementById("prev-month").addEventListener("click", () => {
       currentDate.setMonth(currentDate.getMonth() - 1);
       renderCalendar();
@@ -1445,20 +1293,52 @@
 
     // Модальное окно бронирования
     const bookingModal = document.getElementById("booking-modal");
-    const modalDateLabel = document.getElementById("modal-date-label");
     const formDate = document.getElementById("form-date");
-    const bookingForm = document.getElementById("booking-form");
+    const formStudySelect = document.getElementById("form-study");
+    const formDeptVal = document.getElementById("form-dept-val");
+    const formDeptLabel = document.getElementById("form-dept-label");
+    const formDeptDot = document.getElementById("form-dept-dot");
+    const formDeptTrigger = document.getElementById("form-dept-trigger");
+    const formDeptOptions = document.getElementById("form-dept-options");
 
-    function openBookingModal(dateStr) {
+    function openBookingModalForDay(dateStr) {
       formDate.value = dateStr;
       const parts = dateStr.split("-");
-      modalDateLabel.textContent = `Дата: ${parts[2]}.${parts[1]}.${parts[0]}`;
-      bookingForm.reset();
-      
-      formDeptValue.value = "";
+      document.getElementById("booking-modal-subtitle").textContent = `Дата: ${parts[2]}.${parts[1]}.${parts[0]}`;
+
+      formStudySelect.innerHTML = "";
+      let availableFreeCount = 0;
+
+      STUDY_TYPES.forEach(study => {
+        const slotKey = `${dateStr}_${study}`;
+        const isBooked = !!bookings[slotKey];
+
+        const opt = document.createElement("option");
+        opt.value = study;
+        if (isBooked) {
+          opt.disabled = true;
+          opt.textContent = `${study} (занято: ${bookings[slotKey].department})`;
+        } else {
+          opt.textContent = study;
+          availableFreeCount++;
+        }
+        formStudySelect.appendChild(opt);
+      });
+
+      if (availableFreeCount === 0) {
+        alert("На этот день все 3 исследования (МРТ, КТ-КАГ, ТИАК) уже заняты.");
+        return;
+      }
+
+      const firstFree = Array.from(formStudySelect.options).find(o => !o.disabled);
+      if (firstFree) firstFree.selected = true;
+
+      document.getElementById("form-patient").value = "";
+      document.getElementById("form-notes").value = "";
+      formDeptVal.value = "";
       formDeptLabel.textContent = "Выберите отделение";
       formDeptDot.style.background = "transparent";
-      
+
       // Контроль показа красной плашки
       if (!firebaseDbUrl) {
         bookingDbWarning.classList.add("visible");
@@ -1469,81 +1349,90 @@
       bookingModal.style.display = "flex";
     }
 
+    formDeptTrigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      formDeptOptions.classList.toggle("active");
+    });
+
+    formDeptOptions.querySelectorAll(".dept-option").forEach(opt => {
+      opt.addEventListener("click", () => {
+        const val = opt.getAttribute("data-value");
+        formDeptVal.value = val;
+        formDeptLabel.textContent = val;
+        formDeptDot.style.background = DEPT_THEMES[val].dot;
+        formDeptOptions.classList.remove("active");
+      });
+    });
+
     document.getElementById("btn-cancel-book").addEventListener("click", () => {
       bookingModal.style.display = "none";
     });
 
-    // Быстрый переход к настройке базы прямо из плашки в форме
+    // Быстрый переход к настройке базы прямо из плашки
     document.getElementById("btn-warning-connect-db").addEventListener("click", () => {
       bookingModal.style.display = "none";
       openDbModal();
     });
 
-    bookingForm.addEventListener("submit", async (e) => {
+    document.getElementById("booking-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const dateStr = formDate.value;
+      const study = formStudySelect.value;
+      const slotKey = `${dateStr}_${study}`;
 
-      if (!formDeptValue.value) {
-        alert("Пожалуйста, выберите отделение!");
+      if (!formDeptVal.value) {
+        alert("Пожалуйста, выберите отделение.");
         return;
       }
 
-      if (bookings[dateStr]) {
-        alert("Этот слот уже занят другим отделением!");
+      if (bookings[slotKey]) {
+        alert("Этот слот только что заняли.");
         bookingModal.style.display = "none";
+        renderCalendar();
         return;
       }
-
-      const now = new Date();
-      const timestamp = now.toLocaleString("ru-RU", {
-        day: "2-digit", month: "2-digit", year: "numeric",
-        hour: "2-digit", minute: "2-digit", second: "2-digit"
-      });
-
-      const userIp = await fetchUserIp();
 
       const newBooking = {
         date: dateStr,
-        department: formDeptValue.value,
-        studyType: document.getElementById("form-study").value,
+        studyType: study,
+        department: formDeptVal.value,
         patientName: document.getElementById("form-patient").value.trim(),
         notes: document.getElementById("form-notes").value.trim(),
-        createdAt: timestamp,
-        userIp: userIp
+        createdAt: new Date().toLocaleString("ru-RU")
       };
 
-      saveBooking(dateStr, newBooking);
+      saveBooking(slotKey, newBooking);
       bookingModal.style.display = "none";
     });
 
     // Модальное окно деталей записи
     const viewModal = document.getElementById("view-modal");
-    const viewDeptBadge = document.getElementById("view-dept-badge");
-    let activeDate = null;
+    let activeSlotKey = null;
 
-    function openViewModal(dateStr, record) {
-      activeDate = dateStr;
+    function openViewModal(slotKey, dateStr, study, record) {
+      activeSlotKey = slotKey;
       const parts = dateStr.split("-");
-      document.getElementById("view-date").textContent = `Дата: ${parts[2]}.${parts[1]}.${parts[0]}`;
       
-      const theme = DEPT_THEMES[record.department] || DEPT_THEMES["Другие"];
-      viewDeptBadge.textContent = record.department;
-      viewDeptBadge.style.backgroundColor = theme.bg;
-      viewDeptBadge.style.color = theme.text;
-      viewDeptBadge.style.borderColor = theme.border;
+      document.getElementById("view-study-title").textContent = study;
+      document.getElementById("view-date-subtitle").textContent = `Дата: ${parts[2]}.${parts[1]}.${parts[0]}`;
 
-      document.getElementById("view-study").textContent = record.studyType;
-      document.getElementById("view-patient").textContent = record.patientName;
-      
-      const notesRow = document.getElementById("view-notes-row");
+      const deptBadge = document.getElementById("view-dept-name");
+      const theme = DEPT_THEMES[record.department] || DEPT_THEMES["Другие"];
+      deptBadge.textContent = record.department;
+      deptBadge.style.backgroundColor = theme.bg;
+      deptBadge.style.color = theme.text;
+
+      document.getElementById("view-patient-name").textContent = record.patientName;
+
+      const notesWrap = document.getElementById("view-notes-wrap");
       if (record.notes) {
-        notesRow.style.display = "block";
-        document.getElementById("view-notes").textContent = record.notes;
+        notesWrap.style.display = "block";
+        document.getElementById("view-notes-val").textContent = record.notes;
       } else {
-        notesRow.style.display = "none";
+        notesWrap.style.display = "none";
       }
 
-      document.getElementById("view-timestamp").textContent = record.createdAt || "Не зафиксировано";
+      document.getElementById("view-meta-box").textContent = `Запись создана: ${record.createdAt || "Ранее"}`;
       viewModal.style.display = "flex";
     }
 
@@ -1552,23 +1441,16 @@
     });
 
     document.getElementById("btn-delete-slot").addEventListener("click", () => {
-      if (confirm("Вы уверены, что хотите освободить этот день?")) {
-        removeBooking(activeDate);
+      if (confirm("Освободить этот слот?")) {
+        removeBooking(activeSlotKey);
         viewModal.style.display = "none";
       }
     });
 
-    // Настройка Firebase
+    // Firebase окно
     const dbModal = document.getElementById("db-modal");
-    const fbUrlInput = document.getElementById("fb-url");
-
-    function openDbModal() {
-      fbUrlInput.value = firebaseDbUrl;
-      dbModal.style.display = "flex";
-    }
-
     document.getElementById("btn-db-config").addEventListener("click", () => {
-      gearMenu.classList.remove("active");
+      document.getElementById("gear-menu").classList.remove("active");
       openDbModal();
     });
 
@@ -1577,7 +1459,7 @@
     });
 
     document.getElementById("btn-save-db").addEventListener("click", () => {
-      const url = fbUrlInput.value.trim().replace(/\/$/, "");
+      const url = document.getElementById("fb-url-input").value.trim().replace(/\/$/, "");
       firebaseDbUrl = url;
       if (url) {
         localStorage.setItem("cardioscan_fb_url", url);
@@ -1588,16 +1470,68 @@
       loadData();
     });
 
-    // Автообновление каждые 12 секунд
-    setInterval(() => {
-      if (firebaseDbUrl) {
-        loadData();
+    // Меню и экспорт
+    document.getElementById("btn-gear").addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.getElementById("gear-menu").classList.toggle("active");
+    });
+
+    document.getElementById("btn-reset").addEventListener("click", () => {
+      document.getElementById("gear-menu").classList.remove("active");
+      if (confirm("Вы точно хотите удалить все записи?")) {
+        bookings = {};
+        localStorage.removeItem("cardioscan_slots_v2");
+        if (firebaseDbUrl) fetch(`${firebaseDbUrl}/slots_v2.json`, { method: "DELETE" });
+        renderCalendar();
       }
-    }, 12000);
+    });
+
+    document.getElementById("btn-export-month").addEventListener("click", () => {
+      document.getElementById("gear-menu").classList.remove("active");
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const prefix = `${year}-${String(month + 1).padStart(2, '0')}`;
+
+      const monthBookings = Object.keys(bookings)
+        .filter(k => k.startsWith(prefix))
+        .sort()
+        .map(k => bookings[k]);
+
+      if (monthBookings.length === 0) {
+        alert("В этом месяце нет записей.");
+        return;
+      }
+
+      let text = `График исследований (${monthNames[month]} ${year}):\n\n`;
+      monthBookings.forEach((b, i) => {
+        const parts = b.date.split("-");
+        text += `${i + 1}. ${parts[2]}.${parts[1]}: [${b.studyType}] ${b.department} — ${b.patientName}${b.notes ? " (" + b.notes + ")" : ""}\n`;
+      });
+
+      navigator.clipboard.writeText(text).then(() => alert("Список скопирован!"));
+    });
+
+    // Инструкция
+    document.getElementById("btn-open-help").addEventListener("click", () => {
+      document.getElementById("help-modal").style.display = "flex";
+    });
+    document.getElementById("btn-close-help").addEventListener("click", () => {
+      document.getElementById("help-modal").style.display = "none";
+    });
+
+    document.addEventListener("click", () => {
+      document.getElementById("gear-menu").classList.remove("active");
+      if (formDeptOptions) formDeptOptions.classList.remove("active");
+    });
+
+    setInterval(() => {
+      if (firebaseDbUrl) loadData();
+    }, 10000);
 
     // Первичная инициализация и проверка наличия базы при старте
     loadData();
 
+    // Защита: если база не подключена, сразу открываем модальное окно с предложением вставить URL
     if (!firebaseDbUrl) {
       setTimeout(() => {
         openDbModal();
