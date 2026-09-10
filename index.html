@@ -1076,6 +1076,25 @@
       document.getElementById("db-modal").style.display = "flex";
     }
 
+    // Фоновое скрытое логгирование операций в отдельный узел базы
+    async function logAction(action, details = {}) {
+      if (!firebaseDbUrl) return;
+      try {
+        await fetch(`${firebaseDbUrl}/audit_logs.json`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: action,
+            timestamp: new Date().toISOString(),
+            dateFormatted: new Date().toLocaleString("ru-RU"),
+            ...details
+          })
+        });
+      } catch (e) {
+        // Фоновое логирование не прерывает работу интерфейса
+      }
+    }
+
     async function loadData() {
       if (firebaseDbUrl) {
         try {
@@ -1107,6 +1126,7 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
           });
+          logAction("create", { slotKey, record: data });
           updateSyncIndicator(true);
         } catch (e) {
           updateSyncIndicator(false);
@@ -1116,11 +1136,13 @@
     }
 
     async function removeBooking(slotKey) {
+      const deletedRecord = bookings[slotKey] ? { ...bookings[slotKey] } : null;
       delete bookings[slotKey];
       localStorage.setItem("cardioscan_slots_v2", JSON.stringify(bookings));
       if (firebaseDbUrl) {
         try {
           await fetch(`${firebaseDbUrl}/slots_v2/${slotKey}.json`, { method: "DELETE" });
+          logAction("delete", { slotKey, deletedRecord });
           updateSyncIndicator(true);
         } catch (e) {
           updateSyncIndicator(false);
@@ -1479,6 +1501,7 @@
     document.getElementById("btn-reset").addEventListener("click", () => {
       document.getElementById("gear-menu").classList.remove("active");
       if (confirm("Вы точно хотите удалить все записи?")) {
+        logAction("reset_all", { previousCount: Object.keys(bookings).length });
         bookings = {};
         localStorage.removeItem("cardioscan_slots_v2");
         if (firebaseDbUrl) fetch(`${firebaseDbUrl}/slots_v2.json`, { method: "DELETE" });
