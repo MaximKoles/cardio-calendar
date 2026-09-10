@@ -945,7 +945,7 @@
 
         <div class="form-group">
           <label>Пациент (Фамилия И.О.)</label>
-          <input type="text" id="form-patient" placeholder="Иванов И.И." required />
+          <input type="text" id="form-patient" placeholder="Опционально" />
         </div>
 
         <div class="form-group">
@@ -1418,7 +1418,7 @@
         date: dateStr,
         studyType: study,
         department: formDeptVal.value,
-        patientName: document.getElementById("form-patient").value.trim(),
+        patientName: document.getElementById("form-patient").value.trim() || "Не указан",
         notes: document.getElementById("form-notes").value.trim(),
         createdAt: new Date().toLocaleString("ru-RU")
       };
